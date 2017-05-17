@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>World Happiness Map</title>
+
+    <link href="css/d3.geomap.css" rel="stylesheet">
+    <link href="css/layout.css" rel="stylesheet">
+
+
+    <!--changed version to ver3-->
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script src="vendor/d3.geomap.dependencies.min.js"></script>
+    <script src="js/d3.geomap.min.js"></script>
+    <script src="js/d3.geomap.js"></script>
+    <script src="js/d3/legend.js"></script>
+    <script src="js/d3/app.js"></script>
+    <script src="js/d3/brush.js"></script>
+
+
+
+</head>
+
+<body>
+
+
+
+
+<!--div at the left-->
+<div id="total" >
+<div id="left">
+    <div id="sliderDiv">
+        <input type="range" id="slider" value="10" onclick="yearChange()">
+        <input type="text" id="year">
+    </div>
+    <div class = "emptyDivMap" ondragover="allowDrop(event)" ondrop="dropMap()"></div>
+    <div id="map" ></div>
+    <div class="legend">
+        <svg id="legendSVG"></svg></div>
+</div>
+
+<!--div at the middle-->
+
+<!--div at the right-->
+<div id="right">
+
+    <div class="emptyDivEntireBar"></div>
+    <div class="forStack">
+    <div id="emptyDiv1" class="emptyDivs" ondragover="getDivNum(event, 'emptyDiv1')" ondrop="moveDiv()"></div>
+    <div class=barDiv id =barDiv1 draggable="true" onmouseover="displayButton()" onmouseout="hideButton()" ondragstart="dragDiv('barDiv1')" ondragover="allowDropDiv(event, 'barDiv1')">
+        <div class="relative">
+            <div id="tooltip" class="hidden">
+                <p><span id="value">100</span></p>
+            </div>
+            <svg id="SVG1" class="barGraphSvg"></svg></div>
+        <img class="sortIcon" id = "sort1" src="img/sort.png">
+    </div>
+    <div id="emptyDiv2" class="emptyDivs" ondragover="getDivNum(event, 'emptyDiv2')" ondrop="moveDiv()"></div>
+    <div class=barDiv id = barDiv2 draggable="true" onmouseover="displayButton2()" onmouseout="hideButton2()" ondragstart="dragDiv('barDiv2')" ondragover="allowDropDiv(event, 'barDiv2')">
+        <svg  id="SVG2" class="barGraphSvg"></svg>
+        <img class="sortIcon" id = "sort2" src="img/sort.png">
+    </div>
+    <div id="emptyDiv3" class="emptyDivs" ondragover="getDivNum(event, 'emptyDiv3')" ondrop="moveDiv()"></div>
+    <div class=barDiv id =barDiv3 draggable="true" onmouseover="displayButton3()" onmouseout="hideButton3()" ondragstart="dragDiv('barDiv3')" ondragover="allowDropDiv(event, 'barDiv3')">
+        <svg  id="SVG3" class="barGraphSvg"></svg>
+        <img class="sortIcon" id = "sort3" src="img/sort.png">
+    </div>
+    <div id="emptyDiv4" class="emptyDivs" ondragover="getDivNum(event, 'emptyDiv4')" ondrop="moveDiv()"></div>
+    <div class=barDiv id =barDiv4 draggable="true" onmouseover="displayButton4()" onmouseout="hideButton4()" ondragstart="dragDiv('barDiv4')" ondragover="allowDropDiv(event, 'barDiv4')">
+        <svg  id="SVG4" class="barGraphSvg"></svg>
+        <img class="sortIcon" id = "sort4" src="img/sort.png">
+    </div>
+    <div id="emptyDiv5" class="emptyDivs" ondragover="getDivNum(event, 'emptyDiv5')" ondrop="moveDiv()"></div>
+    <div class=barDiv id =barDiv5 draggable="true" onmouseover="displayButton5()" onmouseout="hideButton5()" ondragstart="dragDiv('barDiv5')" ondragover="allowDropDiv(event, 'barDiv5')">
+        <svg  id="SVG5" class="barGraphSvg"></svg>
+        <img class="sortIcon" id = "sort5" src="img/sort.png">
+    </div>
+    <div id="emptyDiv6" class="emptyDivs" ondragover="getDivNum(event, 'emptyDiv6')" ondrop="moveDiv()"></div>
+    <div class=barDiv id =barDiv6 draggable="true" onmouseover="displayButton6()" onmouseout="hideButton6()" ondragstart="dragDiv('barDiv6')" ondragover="allowDropDiv(event, 'barDiv6')">
+        <svg  id="SVG6" class="barGraphSvg"></svg>
+        <img class="sortIcon" id = "sort6" src="img/sort.png">
+    </div>
+    <div id="emptyDiv7" class="emptyDivs" ondragover="getDivNum(event, 'emptyDiv7')" ondrop="moveDiv()"></div>
+    <div class=barDiv id =barDiv7 draggable="true" onmouseover="displayButton7()" onmouseout="hideButton7()" ondragstart="dragDiv('barDiv7')" ondragover="allowDropDiv(event, 'barDiv7')">
+        <svg  id="SVG7" class="barGraphSvg"></svg>
+        <img class="sortIcon" id = "sort7" src="img/sort.png">
+    </div>
+</div>
+</div>
+</div>
+<!--div at the bottom-->
+<div id="bottom" >
+<div class="scatterDiv">
+
+    <svg id="SVGScatter" ondragover="dragDropScatter.allowDropScatter(event)" ondrop="dragDropScatter.dropScatter()"></svg>
+    <div id="yAxisHighlight" class="highlight" ondragover="allowDrop(event)" ondrop="dragDropScatter.dropScatter()"></div>
+    <div id="xAxisHighlight" class="highlight" ondragover="allowDrop(event)" ondrop="dragDropScatter.dropScatter()"></div>
+
+    <div id="tooltipScatter" class="hidden">
+        <p><span id="valueScatter">100</span></p>
+    </div>
+</div>
+    <div class="menu">
+    <!--<div id="pageTitle">-->
+        <!--<p >World Happiness Map</p>-->
+    <!--</div>-->
+    <div class="containerWithBorder1">
+        <div class="subC" id="hScoreSub" onmouseover="whatIsThisVariable(0)" draggable="true" ondragstart="drag(categories[0], 'barDiv1')" ondragend="removeLines()"><p>Happiness Score</p></div>
+        <div class="subC" id="gdp" onmouseover="whatIsThisVariable(1)" draggable="true" ondragstart="drag(categories[1], 'barDiv2')" ondragend="removeLines()"><p>GDP per capita</p></div>
+        <div class="subC" id="gini" onmouseover="whatIsThisVariable(2)" draggable="true" ondragstart="drag(categories[2], 'barDiv3')" ondragend="removeLines()"><p>GINI Index</p></div>
+        <div class="subC" id="corruption" onmouseover="whatIsThisVariable(3)" draggable="true" ondragstart="drag(categories[3], 'barDiv4')" ondragend="removeLines()"><p>Perception of Corruption</p></div>
+        <div class="subC" id="democracy" onmouseover="whatIsThisVariable(4)" draggable="true" ondragstart="drag(categories[4], 'barDiv5')" ondragend="removeLines()"><p>Democratic Quality</p></div>
+        <div class="subC" id="expectancy" onmouseover="whatIsThisVariable(5)" draggable="true" ondragstart="drag(categories[5], 'barDiv6')" ondragend="removeLines()"><p>Social Support</p></div>
+        <div class="subC" id="support" onmouseover="whatIsThisVariable(6)" draggable="true" ondragstart="drag(categories[6], 'barDiv7')" ondragend="removeLines()"><p>Healthy Life Expectancy</p></div>
+    </div>
+            <div class="containerWithBorder1">
+            <p id="variableExplanation"> </p>
+            <div>
+    </div>
+</div>
+<script>
+//var countryID;
+    var _svgW = 650;
+    var _svgH = 80;
+var singleYearData = [];
+var Data;
+
+var barMax;
+var barMin;
+
+
+
+var categories = ["Life Ladder",	"Log GDP per capita",	"gini of household income reported in Gallup, by wp5-year", "Perceptions of corruption",
+    "Democratic Quality","Social support", "Healthy life expectancy at birth" ];
+var currentScatterX = categories[0]
+var currentScatterY = categories[1]
+    var format = function(d) {
+        return (d);
+    };
+//this function runs at the start of this application
+//draws everything on page
+var drawMap = (function() {
+      var _fetchCSV = function(variable, currentYear) {
+//          var map = d3.geomap.choropleth()
+
+          var map = d3.geomap()
+              .geofile('topojson/world/countries.json')
+              .unitId('Country Code');
+
+          d3.select("#map").selectAll("*").remove();
+          d3.csv("data/happiness(noNCyp).csv", function (error, data) {
+              Data = data;
+
+              //only a data for one year
+              for(var i=0;i<Data.length;i++){
+                  if(Data[i]["year"] == currentYear){
+                      singleYearData.push(Data[i]);
+//                     // entireID.push(Data[i]["Country Code"])
+                  }
+              };
+
+              for(var i=0; i<singleYearData.length;i++){
+                  singleYearData[i].code = i;
+              }
+
+              getBarChartScale(Data, singleYearData);
+            getColorValue.getRawValues(singleYearData, variable);
+
+              if (error) throw error;
+              d3.select('#map')
+                  .datum(singleYearData)
+                  .call(map.draw, map)
+
+              drawScatter(singleYearData, currentScatterX, currentScatterY);
+              legend.drawLegend();
+
+          });
+      };
+
+     return{
+         fetchCSV:_fetchCSV
+     }
+  })();
+var currentVar = [];
+var currentDivID;
+var beforeThisDiv;
+
+var drag = function(variable, barDivNum) {
+    currentVar[0] = variable;
+    currentDivID = barDivNum;
+
+    $(".emptyDivMap").css("display", "block");
+    $("#yAxisHighlight").css("display", "block");
+    $("#xAxisHighlight").css("display", "block");
+    $(".emptyDivEntireBar").css("display", "block");
+}
+
+function removeLines(){
+    $(".emptyDivMap").css("display", "none");
+    $("#yAxisHighlight").css("display", "none");
+    $("#xAxisHighlight").css("display", "none");
+    $(".emptyDivEntireBar").css("display", "none");
+}
+//below function may be deleted
+var dragDiv = function(variable){
+//    currentDivID = variable;
+//    console.log(currentDivID)
+}
+//
+//
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+
+var dragDropScatter = (function(){
+    var whichAxis = -1;
+
+function _allowDropScatter(ev) {
+    ev.preventDefault();
+
+    //x and y coordinates
+    var x = ev.clientX;
+    var y = ev.clientY;
+
+    //which axis var is changed?
+    // 0 == x axis, 1 = y axis;
+
+
+        if (x < 200) {
+            whichAxis = 1;
+            $("#yAxisHighlight").css("display", "block");
+            $("#xAxisHighlight").css("display", "none");
+            if (x < 0) {
+                $("#yAxisHighlight").css("display", "none");
+            }
+        }
+        else if (x >= 200) {
+            whichAxis = 0;
+            $("#yAxisHighlight").css("display", "none");
+            $("#xAxisHighlight").css("display", "block");
+            if (x > 300) {
+                $("#xAxisHighlight").css("display", "none");
+            }
+        }
+}
+var _dropScatter = function () {
+        if (whichAxis == 1) {
+            $("#xAxisHighlight").css("display", "none");
+            $("#yAxisHighlight").css("display", "none");
+            currentScatterX = scatterX;
+            drawScatter(singleYearData, scatterX, currentVar[0]);
+        }
+        else if(whichAxis == 0) {
+            $("#xAxisHighlight").css("display", "none");
+            $("#yAxisHighlight").css("display", "none");
+
+            currentScatterY = scatterY;
+            drawScatter(singleYearData, currentVar[0], scatterY)
+        }
+    }
+
+    return{
+    dropScatter:_dropScatter,
+        allowDropScatter:_allowDropScatter
+}
+
+
+})();
+
+//on dragover
+function allowDropDiv(ev, variable) {
+    ev.preventDefault();
+//    beforeThisDiv = variable;
+    if(variable == "barDiv1"){
+        $(".emptyDivs").css("display", "none");
+        $("#emptyDiv1").css("display", "block");
+    }
+    else if(variable == "barDiv2"){
+        $(".emptyDivs").css("display", "none");
+        $("#emptyDiv2").css("display", "block");
+    }
+    else if(variable == "barDiv3"){
+        $(".emptyDivs").css("display", "none");
+        $("#emptyDiv3").css("display", "block");
+    }
+    else if(variable == "barDiv4"){
+        $(".emptyDivs").css("display", "none");
+        $("#emptyDiv4").css("display", "block");
+    }
+    else if(variable == "barDiv5"){
+        $(".emptyDivs").css("display", "none");
+        $("#emptyDiv5").css("display", "block");
+    }
+    else if(variable == "barDiv6"){
+        $(".emptyDivs").css("display", "none");
+        $("#emptyDiv6").css("display", "block");
+    }
+    else if(variable == "barDiv7"){
+        $(".emptyDivs").css("display", "none");
+        $("#emptyDiv7").css("display", "block");
+    }
+}
+
+//drag
+document.addEventListener("dragstart", function(event) {
+    // The dataTransfer.setData() method sets the data type and the value of the dragged data
+    event.dataTransfer.setData("div", event.target.id);
+
+    // Change the opacity of the draggable element
+//    event.target.style.opacity = "0.4";
+});
+function getDivNum(ev, divName){
+    ev.preventDefault();
+    beforeThisDiv = divName;
+
+
+}
+
+//on drop, it puts the bar graph div in the location designed by blue lined rect.
+function moveDiv(){
+    var thisBarDiv = document.getElementById(beforeThisDiv);
+    var movingBarDiv = document.getElementById(currentDivID);
+console.log("moving div", movingBarDiv)
+console.log("before this div", thisBarDiv)
+    $(thisBarDiv).before($(movingBarDiv));
+    $(".emptyDivs").css("display", "none");
+
+}
+
+//overlaying button
+
+var displayButton = function () {
+    $("#sort1").css("display","block");
+};
+var hideButton = function () {
+    $("#sort1").css("display","none");
+};
+var displayButton2 = function () {
+    $("#sort2").css("display","block");
+};
+var hideButton2 = function () {
+    $("#sort2").css("display","none");
+};
+var displayButton3 = function () {
+    $("#sort3").css("display","block");
+};
+var hideButton3 = function () {
+    $("#sort3").css("display","none");
+};
+var displayButton4 = function () {
+    $("#sort4").css("display","block");
+};
+var hideButton4 = function () {
+    $("#sort4").css("display","none");
+};
+var displayButton5 = function () {
+    $("#sort5").css("display","block");
+};
+var hideButton5 = function () {
+    $("#sort5").css("display","none");
+};
+var displayButton6 = function () {
+    $("#sort6").css("display","block");
+};
+var hideButton6 = function () {
+    $("#sort6").css("display","none");
+};
+var displayButton7 = function () {
+    $("#sort7").css("display","block");
+};
+var hideButton7 = function () {
+    $("#sort7").css("display","none");
+};
+//slider
+
+var timeSlider = document.getElementById("slider");
+timeSlider.min = 0;
+timeSlider.max = 10;
+timeSlider.defaultValue = 10;
+
+var yearValue = document.getElementById("year");
+yearValue.readonly = true;
+yearValue.defaultValue = 2015;
+
+//the numeric value currently selected in the slider
+var currentYear = yearValue.value;
+
+var drop = function(){
+    drawMap.fetchCSV(currentVar[0], currentYear);
+    singleYearData = [];
+};
+
+var already = 0;
+
+function yearChange(){
+    var mapVar;
+    already = 1;
+    singleYearData = [];
+
+    yearValue.value = parseInt(timeSlider.value) + 2005;
+    currentYear = yearValue.value;
+
+    for(var i=0;i<Data.length;i++){
+        if(Data[i]["year"] == currentYear){
+            singleYearData.push(Data[i]);
+        }
+    };
+    for(var i=0; i<singleYearData.length;i++){
+        singleYearData[i].code = i;
+    }
+//to find out what variable is currently being displayed
+    if(currentVar[0]==undefined){
+        mapVar = categories[0]
+    }
+    else{
+        mapVar = currentVar[0];
+    }
+
+    getColorValue.getRawValues(singleYearData, mapVar);
+    getColorValue.recolorMap();
+
+    updateBar(singleYearData, barMax, barMin, categories[0], categories[1], categories[2], categories[3], categories[4], categories[5], categories[6]);
+    drawScatter(singleYearData, currentScatterX, currentScatterY);
+
+}
+//function for changing contents for explanation
+function whatIsThisVariable(variableNum){
+
+    if(variableNum == 0){
+        $("#variableExplanation").html("Happiness score or subjective well-being. The participants gave score to their current lives, with score 10 as the best possible life, and 0 as the worst possible life.")
+    } else if(variableNum == 1){
+        $("#variableExplanation").html("Gross Domestic Product divided by entire population.")
+    }else if(variableNum == 2){
+        $("#variableExplanation").html("A measure of income distribution in the country. The higher the score is, the more severe the income gap is between the poor and the rich.")
+    }else if(variableNum == 3){
+        $("#variableExplanation").html("Average of perceived corruption in business and government. The number is an average from each participant's answer (0: corruption does not exist, 1:corruption exists).")
+    }else if(variableNum == 4){
+        $("#variableExplanation").html("Based on Worldwide Governance Indicators, this score represents 'voice and accountability' and 'political stability and absence of violence'")
+    }else if(variableNum == 5){
+        $("#variableExplanation").html("Healthy life expectancy at birth. It represents the number of years people are expected to live in good health")
+    }else if(variableNum == 6){
+        $("#variableExplanation").html("It represents whether or not a person has someone to count on in times of trouble. The response was binary(0: no one to count on, 1: someone to count on)")
+    }
+}
+function dropMap(){
+        getColorValue.getRawValues(singleYearData, currentVar[0]);
+//        getColorValue.recolorMap();
+}
+//this function finds max and min value for each variable
+//so that bar chart uses same scale for every year (inst of changing every year)
+function getBarChartScale(Data, singleYearData){
+    var cate0 = [], cate1 = [], cate2 = [], cate3 = [], cate4 = [], cate5 = [], cate6 = [];
+
+    //receive data
+    for(var i=0; i<Data.length;i++) {
+        if(Data[i][categories[0]] > 0) {
+        cate0.push(Number(Data[i][categories[0]]));}
+        if(Data[i][categories[1]] > 0) {
+        cate1.push(Number(Data[i][categories[1]]));}
+        if(Data[i][categories[2]] > 0) {
+        cate2.push(Number(Data[i][categories[2]]));}
+        if(Data[i][categories[3]] > 0) {
+        cate3.push(Number(Data[i][categories[3]]));}
+        if(Data[i][categories[4]] > 0) {
+        cate4.push(Number(Data[i][categories[4]]));}
+        if(Data[i][categories[5]] > 0) {
+        cate5.push(Number(Data[i][categories[5]]));}
+        if(Data[i][categories[6]] > 0) {
+        cate6.push(Number(Data[i][categories[6]]));}
+    }
+
+    //find max of var1
+    //find max of var2...
+    var cate0Max = d3.max(cate0);
+    var cate1Max = d3.max(cate1);
+    var cate2Max = d3.max(cate2);
+    var cate3Max = d3.max(cate3);
+    var cate4Max = d3.max(cate4);
+    var cate5Max = d3.max(cate5);
+    var cate6Max = d3.max(cate6);
+
+    var cate0Min = d3.min(cate0);
+    var cate1Min = d3.min(cate1);
+    var cate2Min = d3.min(cate2);
+    var cate3Min = d3.min(cate3);
+    var cate4Min = d3.min(cate4);
+    var cate5Min = d3.min(cate5);
+    var cate6Min = d3.min(cate6);
+
+    var _max = [cate0Max, cate1Max, cate2Max, cate3Max, cate4Max, cate5Max, cate6Max];
+    var _min = [cate0Min, cate1Min, cate2Min, cate3Min, cate4Min, cate5Min, cate6Min];
+    console.log(_max)
+    console.log(_min)
+    drawBar(singleYearData, _max, _min, categories[0], categories[1], categories[2], categories[3], categories[4], categories[5], categories[6]);
+    barMax = _max;
+    barMin = _min;
+
+}
+drawMap.fetchCSV(categories[0], currentYear);
+
+
+</script>
+
+<script src="lib/jquery-3.1.1.min.js"></script>
+
+
+</body>
+</html>
