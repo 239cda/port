@@ -1,0 +1,22 @@
+text {
+  fill: #333;
+  font-size: 12px; }
+
+.background {
+  fill: none;
+  pointer-events: all;
+}
+
+.unit {
+  cursor: pointer;
+  fill: #ccc;
+  stroke: #000;
+  stroke-width: 0.4px; }
+
+.unit:hover{
+   stroke-width: 2.5px;
+   stroke: #fd7d4f;
+ }
+
+
+/*# sourceMappingURL=geomap.css.map */
