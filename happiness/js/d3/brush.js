@@ -1,16 +1,8 @@
-// /**
-//  * Created by InKwon on 2017-05-11.
-//  */
-// //brushing effect
-// //when selecting part of scatterplot -> highlight same parts in bar graph + world Map
-// //same for bar graph -> scatterplot + world map
+var brushOn = false;
 
 function callBrush(minMax) {
-    //minMax = [_minX,_minY,_maxX,_maxY];
-// console.log(minMax)
-
     var _scatterH = 350;
-    var _padding = 60;
+    var _padding = 30;
     var svg = d3.select("#SVGScatter").append("svg")
         .attr("width", _scatterH)
         .attr("height",_scatterH)
@@ -20,7 +12,7 @@ function callBrush(minMax) {
 //send min/max to here
     var y = d3.scale.linear()
         .domain([minMax[1], minMax[3]])
-        .range([_scatterH - _padding - 10, 20]);
+        .range([_scatterH - _padding - 10, 0]);
 
     var x = d3.scale.linear()
         .domain([minMax[0], minMax[2]])
@@ -33,37 +25,54 @@ function callBrush(minMax) {
         .on("brush", brushmove)
         .on("brushend", brushend);
 
-    svg.append("g")
+    d3.select("#SVGScatter").append("g")
         .attr("class", "brush")
         .call(brush);
 
     function brushstart(){
         d3.select("#SVGScatter").call(brush.clear());
+
+        d3.select("#SVGScatter")
+            .selectAll("circle")
+            .attr("fill", "grey");
+
     }
 
 // Highlight the selected circles.
     function brushmove() {
-         var e = brush.extent();
-        var selectedCircles = [];
+        brushOn = true;
+
+        var e = brush.extent();
+
         d3.select("#SVGScatter")
             .selectAll("circle")
             .classed("hidden", function (d) {
-
-            return e[0][0] > Number(d["Life Ladder"]) || Number(d["Life Ladder"]) > e[1][0]
-                || e[0][1] > Number(d["Log GDP per capita"]) || Number(d["Log GDP per capita"]) > e[1][1];
+            var _xyVar = getCurrentVar();
+            return e[0][0] > Number(d[_xyVar[0]]) || Number(d[_xyVar[0]]) > e[1][0]
+                || e[0][1] > Number(d[_xyVar[1]]) || Number(d[_xyVar[1]]) > e[1][1];
         })
             .attr("fill", highlightCol);
-      // d3.select("#SVGScatter").selectAll("circle").selectAll(".hidden")
-      //     .attr("fill", function(d) {
-      //         return "Yellow";
-      //     });
               brushHighlight();
     }
 
 // If the brush is empty, select all circles.
     function brushend() {
-        if (brush.empty()) d3.select("#SVGScatter").selectAll(".hidden").classed("hidden", false)
-            .attr("fill", "grey");
+
+        if (brush.empty()) {
+            brushOn = false;
+            d3.select("#SVGScatter").selectAll(".hidden").classed("hidden", false)
+                .attr("fill", "grey");
+        }
+
+            //
+            // d3.select("#SVG1").selectAll("rect").attr("fill", "grey");
+            // d3.select("#SVG2").selectAll("rect").attr("fill", "grey");
+            // d3.select("#SVG3").selectAll("rect").attr("fill", "grey");
+            // d3.select("#SVG4").selectAll("rect").attr("fill", "grey");
+            // d3.select("#SVG5").selectAll("rect").attr("fill", "grey");
+            // d3.select("#SVG6").selectAll("rect").attr("fill", "grey");
+            // d3.select("#SVG7").selectAll("rect").attr("fill", "grey");
+
     }
 
 };

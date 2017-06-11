@@ -3,12 +3,18 @@
 var selectedCountry;
 var storedColorValues = [];
 var idOrder = [];
+var isCountrySelected = false;
 
 //number value for each country that represents which color to paint(from 1-9)
 var valuesInRange = [];
 //to find out which country is being assigned each color, this has same order as valuesInRange.
 //use this array to match d.id and paint only the countries that had valid values
 var codeStorage = [];
+var mouseX, mouseY;
+var kZoom = 2,
+    x0 = 200,
+    y0 = 100;
+var isZoomed = false;
 
 function addAccessor(obj, name, value) {
     obj[name] = function (_) {
@@ -17,12 +23,12 @@ function addAccessor(obj, name, value) {
         return obj;
     };
 }
-function mapColor(selectedBar){
-    // returnToDefault();
+function mapColor(selectedBar) {
     selectedCountry = selectedBar;
-
-    hoverCountry(selectedCountry);
+        hoverCountry(selectedCountry);
 }
+
+
 // This product includes color specifications and designs developed by Cynthia Brewer (http://colorbrewer.org/).
 "use strict";
 
@@ -48,27 +54,26 @@ var countryID = 0;
 var Geomap = (function () {
     function Geomap() {
         _classCallCheck(this, Geomap);
-
         // Set default properties optimized for naturalEarth projection.
         this.properties = {
             geofile: null,
-            height: 275,
+            height: 200,
             postUpdate: null,
             projection: d3.geo.equirectangular,
             rotate: [0, 0, 0],
-            scale: 105,
-            translate: [310, 160],
+            scale: 85,
+            translate: [265, 115],
             unitId: 'iso3',
             unitPrefix: 'unit-',
             units: 'units',
             unitTitle: function unitTitle(d) {
+
                 return d.properties.name;
             },
-            width: 630,
+            width: 650,
             zoomFactor: 4,
             clipExtent: null
-        };
-
+        }
         // Setup methods to access properties.
         for (var key in this.properties) {
             addAccessor(this, key, this.properties[key]);
@@ -76,31 +81,32 @@ var Geomap = (function () {
         this._ = {};
     }
 
-
     _createClass(Geomap, [{
         key: 'clicked',
         value: function clicked(d) {
-            var _this = this;
+            //this part disabled because I wanted to select a country by click.
+            //zoom changed to scrolling.
 
-            var k = 1,
-                x0 = this.properties.width / 2,
-                y0 = this.properties.height / 2,
-                x = x0,
-                y = y0;
-
-            if (d && d.hasOwnProperty('geometry') && this._.centered !== d) {
-                var centroid = this.path.centroid(d);
-                x = centroid[0];
-                y = centroid[1];
-                k = this.properties.zoomFactor;
-                this._.centered = d;
-            } else this._.centered = null;
-
-            this.svg.selectAll('path.unit').classed('active', this._.centered && function (_) {
-                return _ === _this._.centered;
-            });
-
-            this.svg.selectAll('g.zoom').transition().duration(750).attr('transform', 'translate(' + x0 + ', ' + y0 + ')scale(' + k + ')translate(-' + x + ', -' + y + ')');
+        //     var _this = this;
+        //     var k = 1,
+        //         x0 = this.properties.width / 2,
+        //         y0 = this.properties.height / 2,
+        //         x = x0,
+        //         y = y0;
+        //
+        //     if (d && d.hasOwnProperty('geometry') && this._.centered !== d) {
+        //         var centroid = this.path.centroid(d);
+        //         x = centroid[0];
+        //         y = centroid[1];
+        //         k = this.properties.zoomFactor;
+        //         this._.centered = d;
+        //     } else this._.centered = null;
+        //
+        //     this.svg.selectAll('path.unit').classed('active', this._.centered && function (_) {
+        //         return _ === _this._.centered;
+        //     });
+        //
+        //     this.svg.selectAll('g.zoom').transition().duration(750).attr('transform', 'translate(' + x0 + ', ' + y0 + ')scale(' + k + ')translate(-' + x + ', -' + y + ')');
         }
 
         /**
@@ -137,23 +143,32 @@ var Geomap = (function () {
             // Load and render geo data.
             d3.json(self.properties.geofile, function (error, geo) {
                 self.geo = geo;
-
                 self.svg.attr("class", "mapSVG");
 
-                var mapTitle = self.properties.column;
+                var zoom = d3.behavior.zoom()
+                    .translate(geo.transform.translate)
+                    .scale(geo.transform.scale)
+                    .scaleExtent([275, 8 * 275])
+                    .on("zoom", zooming);
 
-                if (mapTitle == "gini of household income reported in Gallup, by wp5-year") {mapTitle = "GINI Index";}
-                else if(mapTitle == "Healthy life expectancy at birth") {mapTitle = "Healthy Life Expectancy";}
-                else if(mapTitle == "Life Ladder") {mapTitle = "Happiness Score";}
+                d3.select("#map").call(zoom);
 
-                //
-                self.svg.append("text")
-                    .attr("x", 250)
-                    .attr("y", 250)
-                    .style("font-size", "25px")
-                    .style("fill", "grey")
-                    .text(mapTitle)
-                    .style("class","mapTitle");
+                var pastX;
+                var pastY;
+                function zooming() {
+                    if(event.deltaY > 0){
+                        self.svg.selectAll('g.zoom').transition().duration(750).attr('transform', 'scale(1)');
+                    }
+                    else if(event.deltaY < 0){
+                        self.svg.selectAll('g.zoom').transition().duration(750).attr('transform', 'translate(' + x0 + ', ' + y0 + ')scale(' + kZoom + ')translate(-' + mouseX  + ', -' + mouseY + ')');
+                        // self.svg.selectAll('g.zoom').transition().duration(750).attr('transform', 'scale(' + kZoom + ')translate(-' + mouseX + ', -' + mouseY + ')');
+                    }
+                    pastX = mouseX;
+                    pastY = mouseY;
+                }
+
+
+
 
                 self.svg.append('g').attr('class', 'units zoom').selectAll('path')
                     .data(topojson.feature(geo, geo.objects[self.properties.units]).features).enter()
@@ -161,17 +176,110 @@ var Geomap = (function () {
 
                    return 'unit ' + self.properties.unitPrefix + d.id;
                 })
+
                     .attr("d", self.path).on("mouseover", function(d)
                 {
-                    update(d.id);
-                    countryID = d.id;
-                    currentCountry = countryID;
-                    hoverCountry(currentCountry);
-                    changeColor(currentCountry);
-                })
-                    .attr('d', self.path).on('click', self.clicked.bind(self)).append('title').text(self.properties.unitTitle);
 
-               //choropleth!
+                    var svg = d3.select("#map")
+                    var mouse = d3.mouse(svg.node()).map(function(d) {
+                        return parseInt(d);
+                    });
+
+                    mouseX = mouse[0];
+                    mouseY = mouse[1];
+
+
+                    //Update the tooltip position and value
+                    d3.select("#tooltipMap")
+                        .style("left", mouse[0] + 20 +"px")
+                        .style("top", mouse[1] + 10 + "px")
+                        .select("#valueMap")
+                    .text(d.properties.name);
+
+                    //Show the tooltip
+                    d3.select("#tooltipMap").classed("hiddenMap", false);
+
+                    if(isCountrySelected == false) {
+                        update(d.id);
+                        countryID = d.id;
+                        currentCountry = countryID;
+                        hoverCountry(currentCountry);
+                        changeColor(currentCountry);
+                    }
+                    else if(isCountrySelected == true) {
+                        countryID = d.id;
+                        var thisCountry = countryID;
+
+                        d3.selectAll(".unit").style("fill", function (d) {
+                            if (d.id == thisCountry) {
+                                var location = codeStorage.indexOf(d.id);
+                                var rawColorCode = Number(valuesInRange[location]);
+                                // legend.highlightLegend(rawColorCode);
+                                return highlightCol;
+                            }
+                            else if(d.id == currentCountry){
+                                return highlightCol;
+                            }
+                            else {
+                                var codeIndex = codeStorage.indexOf(d.id);
+                                if (codeIndex >= 0) {
+                                    var _colorCode = valuesInRange[codeIndex];
+                                    return returnColor(_colorCode);
+                                }
+                            };
+                        })
+                        // hoverCountry(currentCountry);
+                    };
+
+
+                })
+                    .attr('d', self.path).on('click', function(d){
+
+                    //save selected country and keep highlight. keep showing this country for scatterplot and line chart.
+                    //this continues until user clicks another country.
+                    //to do that, first, create a value that says if a country is being selected or not. -> var countrySelected
+                    //if not selected, it will highlight a country. If already selected, it will delete highlight from formerly selcted country.
+                    //also, mouseover should be modified. if countryselected == 1, hover should show highlights but not change data.
+                    if(isCountrySelected == false) {
+                        update(d.id);
+                        countryID = d.id;
+                        currentCountry = countryID;
+                        hoverCountry(currentCountry);
+                        changeColor(currentCountry);
+
+                        isCountrySelected = true;
+                    }
+
+                    else if(isCountrySelected == true){
+                        var formerColored = currentCountry;
+                        console.log(d.id, currentCountry)
+                        if (d.id == currentCountry) {
+                        d3.selectAll(".unit").style("fill", function (d) {
+
+                                var codeIndex = codeStorage.indexOf(d.id);
+                                isCountrySelected = false;
+                                if (codeIndex >= 0) {
+                                    var _colorCode = valuesInRange[codeIndex];
+                                    return returnColor(_colorCode);
+                                }
+                        })
+                        }
+                        //if a user selects a different country, the coloring changes immediately to reflect change
+
+                        else {
+                            update(d.id);
+                            countryID = d.id;
+                            currentCountry = countryID;
+                            hoverCountry(currentCountry);
+                            changeColor(currentCountry);
+
+                            isCountrySelected = true;
+                        }
+                    };
+                    //isCountrySelected becomes false only when a user selects same country twice
+                })
+                    // .call(zoom)
+                //choropleth!
 
                 self.svg.selectAll("path.unit")
                     .style("fill", function(d){
@@ -222,28 +330,32 @@ d3.geomap = function () {
 };
 'use strict';
 
+
 //get the value for each country
 //determine which range the country belongs to (which color)
 //return the color value
 //actually, since the values are all aligned based on country code, just return value and color value in order
 function returnColor(_colorCode){
-    if(_colorCode == 1){
+    if(_colorCode == 0){
+        return null;
+    }
+    else if(_colorCode == 1){
         return colorbrewer["Blues"][9][0];
-    }if(_colorCode == 2){
+    }else if(_colorCode == 2){
         return colorbrewer["Blues"][9][1];
-    }if(_colorCode == 3){
+    }else if(_colorCode == 3){
         return colorbrewer["Blues"][9][2];
-    }if(_colorCode == 4){
+    }else if(_colorCode == 4){
         return colorbrewer["Blues"][9][3];
-    }if(_colorCode == 5){
+    }else if(_colorCode == 5){
         return colorbrewer["Blues"][9][4];
-    }if(_colorCode == 6){
+    }else if(_colorCode == 6){
         return colorbrewer["Blues"][9][5];
-    }if(_colorCode == 7){
+    }else if(_colorCode == 7){
         return colorbrewer["Blues"][9][6];
-    }if(_colorCode == 8){
+    }else if(_colorCode == 8){
         return colorbrewer["Blues"][9][7];
-    }if(_colorCode == 9){
+    }else if(_colorCode == 9){
         return colorbrewer["Blues"][9][8];
     }
 };
@@ -254,15 +366,49 @@ var getColorValue = (function(){
 
     function _getRawValues(data, variable)
     {
-        d3.select("#map").selectAll("path.unit").style("fill", null);
+        var property;
+
+        if(variable == categories[0]){property = "var1";}
+        else if(variable == categories[1]){property = "var2";}
+        else if(variable == categories[2]){property = "var3";}
+        else if(variable == categories[3]){property = "var4";}
+        else if(variable == categories[4]){property = "var5";}
+        else if(variable == categories[5]){property = "var6";}
+        else if(variable == categories[6]){property = "var7";}
+
+        //display a label for a map
+        d3.select("#map").selectAll("text").remove();
+
+
+        var mapTitle = variable;
+        if (mapTitle == "gini of household income reported in Gallup, by wp5-year") {mapTitle = "GINI Index";}
+        else if(mapTitle == "Healthy life expectancy at birth") {mapTitle = "Healthy Life Expectancy";}
+        else if(mapTitle == "Life Ladder") {mapTitle = "Happiness Score";}
+
+        d3.select("#map").append("text")
+            // .attr("x", 600)
+            // .attr("y", 600)
+            .style("font-size", "20px")
+            .style("fill", "grey")
+            .text(mapTitle)
+            .attr("class","mapTitle");
+
         codeStorage = [];
         _values = [];
         valuesInRange = [];
 
         for (var i = 0; i <data.length; i++) {
-            _values.push(data[i][variable]);
-            codeStorage.push(data[i]["Country Code"]);
+            if (data[i][property] > 0) {
+                _values.push(data[i][property]);
+                codeStorage.push(data[i]["countryCode"]);
+            }
         };
+
+        if(variable == categories[1]){
+            //run a different function that converts the values to inverse log first
+            getValueGDP(_values);
+        }
+        else{
         //format them
         var _max = d3.max(_values);
         var _min = d3.min(_values);
@@ -273,12 +419,13 @@ var getColorValue = (function(){
             .range([1, 9]);
 
         //find out which values are at the borderline and send them to the function at legend.js
-        scaleValues(_scaleValue);
+        scaleValues(_scaleValue, variable);
 
         //as a result, _scaleValue will return a number bw 1-9
         for (var i = 0; i < _values.length; i++) {
             var v = _scaleValue(_values[i]);
             var colorNum;
+
             if(v<2){colorNum = 1}
             else if(v<3){colorNum = 2}
             else if(v<4){colorNum = 3}
@@ -291,13 +438,14 @@ var getColorValue = (function(){
             // v = Math.round(_scaleValue(_values[i]));
             valuesInRange[i] = colorNum;
         };
-
+        }
     };
     function _recolorMap(){
         d3.select("#map").selectAll("path.unit").style("fill", null);
         d3.select("#map").selectAll("path.unit")
             .style("fill", function(d, i){
                 var codeIndex = codeStorage.indexOf(d.id);
+
                 if(codeIndex>= 0) {
                     var _colorCode = valuesInRange[codeIndex];
                 }
@@ -312,80 +460,241 @@ var getColorValue = (function(){
 })();
 function scaleValues(scale){
     var values = [];
+
+
     for(var i=1;i<10;i++){
         var v = scale.invert(i);
         values.push(v.toFixed(2));
     }
-    receiveLegendValues(values);
+        receiveLegendValues(values);
 }
+function getValueGDP(data) {
+    var _convertedVal = data;
+    var _convertedValLegend = [];
+    for(var i = 0;i<_convertedVal.length;i++){
+            _convertedVal[i] = Number(_convertedVal[i]);
+            _convertedValLegend[i] = Math.exp(Number(_convertedVal[i]));
+    }
+    var _max = d3.max(_convertedVal);
+    var _min = d3.min(_convertedVal);
 
+
+    var _maxLeg = d3.max(_convertedValLegend);
+    var _minLeg = d3.min(_convertedValLegend);
+
+    //divide into 9 groups
+    var _scaleValue = d3.scale.linear()
+        .domain([_min, _max])
+        .range([1, 9]);
+
+    var _scaleValueLeg = d3.scale.linear()
+        .domain([_minLeg, _maxLeg])
+        .range([1, 9]);
+
+    //find out which values are at the borderline and send them to the function at legend.js
+    scaleValues(_scaleValue);
+    scaleValues(_scaleValueLeg);
+
+    //as a result, _scaleValue will return a number bw 1-9
+    for (var i = 0; i < _convertedVal.length; i++) {
+        var v = _scaleValue(_convertedVal[i]);
+
+        var colorNum;
+        if(_convertedVal[i] == null) {
+            colorNum = 0;
+        }
+        else{
+        if (v < 2) {
+            colorNum = 1
+        }
+        else if (v < 3) {
+            colorNum = 2
+        }
+        else if (v < 4) {
+            colorNum = 3
+        }
+        else if (v < 5) {
+            colorNum = 4
+        }
+        else if (v < 6) {
+            colorNum = 5
+        }
+        else if (v < 7) {
+            colorNum = 6
+        }
+        else if (v < 8) {
+            colorNum = 7
+        }
+        else if (v < 9) {
+            colorNum = 8
+        }
+        else if (v < 10) {
+            colorNum = 9
+        }
+        }
+        // v = Math.round(_scaleValue(_values[i]));
+        valuesInRange[i] = colorNum;
+    }
+}
+//colors selected region in the map
 function hoverCountry(selectedCountry) {
-// var idIndex = idOrder.indexOf(colorDelete);
-// var originalColor = storedColorValues[idIndex];
+d3.select("#SVG1").selectAll("rect").style("stroke", "none");
+d3.select("#SVG2").selectAll("rect").style("stroke", "none");
+d3.select("#SVG3").selectAll("rect").style("stroke", "none");
+d3.select("#SVG4").selectAll("rect").style("stroke", "none");
+d3.select("#SVG5").selectAll("rect").style("stroke", "none");
+d3.select("#SVG6").selectAll("rect").style("stroke", "none");
+d3.select("#SVG7").selectAll("rect").style("stroke", "none");
+
+d3.select("#Time1").selectAll("*").remove();
+d3.select("#Time2").selectAll("*").remove();
+d3.select("#Time3").selectAll("*").remove();
+d3.select("#Time4").selectAll("*").remove();
+d3.select("#Time5").selectAll("*").remove();
+d3.select("#Time6").selectAll("*").remove();
+d3.select("#Time7").selectAll("*").remove();
+d3.select("#Time8").selectAll("*").remove();
+
+
+d3.select("#SVGScatter").selectAll("circle").style("stroke", "none");
+d3.select("#map").selectAll("path").style("stroke", "black").style("stroke-width", .5);
 
 //the color values are all saved in valueRangeColor;
 //has to find the order of d.id in the whole countries
 
-d3.selectAll(".unit").style("fill",function(d, i){
-    if(d.id == selectedCountry){
-        var location = codeStorage.indexOf(d.id);
-        var rawColorCode = Number(valuesInRange[location]);
-        legend.highlightLegend(rawColorCode);
-        return highlightCol;
-    }
-    else {
-        var codeIndex = codeStorage.indexOf(d.id);
-        if (codeIndex >= 0) {
-            var _colorCode = valuesInRange[codeIndex];
+    timeChart.countryChange(selectedCountry);
 
-            return returnColor(_colorCode);
-        }
+    if (brushOn == false) {
+        d3.selectAll(".unit").style("fill", function (d, i) {
+            if (d.id == selectedCountry) {
+                var location = codeStorage.indexOf(d.id);
+                var rawColorCode = Number(valuesInRange[location]);
+                legend.highlightLegend(rawColorCode);
+                return highlightCol;
+            }
+            else {
+                var codeIndex = codeStorage.indexOf(d.id);
+                if (codeIndex >= 0) {
+                    var _colorCode = valuesInRange[codeIndex];
+                    return returnColor(_colorCode);
+                }
+            }
+        });
+    };
+    if (brushOn == true) {
+        d3.select("#SVGScatter").selectAll("circle").style("stroke", function (d, i) {
+            if (d.id == selectedCountry) {
+                var location = codeStorage.indexOf(d.id);
+                var rawColorCode = Number(valuesInRange[location]);
+                legend.highlightLegend(rawColorCode);
+                return strokeCol;
+            }
+        })
+            .style("stroke-width", function(d,i){
+        if (d.id == selectedCountry) {
+            return strokeWidth};
+            })
+
+        d3.select("#SVG1").selectAll("rect").style("stroke", function (d, i) {
+            if (d.id == selectedCountry) {
+                var location = codeStorage.indexOf(d.id);
+                var rawColorCode = Number(valuesInRange[location]);
+                legend.highlightLegend(rawColorCode);
+                return strokeCol;
+            }
+        })
+            .style("stroke-width", function(d,i){
+        if (d.id == selectedCountry) {
+            return strokeWidth};
+            })
+        d3.select("#SVG2").selectAll("rect").style("stroke", function (d, i) {
+            if (d.id == selectedCountry) {
+                var location = codeStorage.indexOf(d.id);
+                var rawColorCode = Number(valuesInRange[location]);
+                legend.highlightLegend(rawColorCode);
+                return strokeCol;
+            }
+        })
+            .style("stroke-width", function(d,i){
+        if (d.id == selectedCountry) {
+            return strokeWidth};
+            })
+        d3.select("#SVG3").selectAll("rect").style("stroke", function (d, i) {
+            if (d.id == selectedCountry) {
+                var location = codeStorage.indexOf(d.id);
+                var rawColorCode = Number(valuesInRange[location]);
+                legend.highlightLegend(rawColorCode);
+                return strokeCol;
+            }
+        })
+            .style("stroke-width", function(d,i){
+        if (d.id == selectedCountry) {
+            return strokeWidth};
+            })
+        d3.select("#SVG4").selectAll("rect").style("stroke", function (d, i) {
+            if (d.id == selectedCountry) {
+                var location = codeStorage.indexOf(d.id);
+                var rawColorCode = Number(valuesInRange[location]);
+                legend.highlightLegend(rawColorCode);
+                return strokeCol;
+            }
+        })
+            .style("stroke-width", function(d,i){
+        if (d.id == selectedCountry) {
+            return strokeWidth};
+            })
+        d3.select("#SVG5").selectAll("rect").style("stroke", function (d, i) {
+            if (d.id == selectedCountry) {
+                var location = codeStorage.indexOf(d.id);
+                var rawColorCode = Number(valuesInRange[location]);
+                legend.highlightLegend(rawColorCode);
+                return strokeCol;
+            }
+        })
+            .style("stroke-width", function(d,i){
+        if (d.id == selectedCountry) {
+            return strokeWidth};
+            })
+        d3.select("#SVG6").selectAll("rect").style("stroke", function (d, i) {
+            if (d.id == selectedCountry) {
+                var location = codeStorage.indexOf(d.id);
+                var rawColorCode = Number(valuesInRange[location]);
+                legend.highlightLegend(rawColorCode);
+                return strokeCol;
+            }
+        })
+            .style("stroke-width", function(d,i){
+        if (d.id == selectedCountry) {
+            return strokeWidth};
+            })
+        d3.select("#SVG7").selectAll("rect").style("stroke", function (d, i) {
+            if (d.id == selectedCountry) {
+                var location = codeStorage.indexOf(d.id);
+                var rawColorCode = Number(valuesInRange[location]);
+                legend.highlightLegend(rawColorCode);
+                return strokeCol;
+            }
+        })
+            .style("stroke-width", function(d,i){
+        if (d.id == selectedCountry) {
+            return strokeWidth};
+            })
+
+        d3.select("#map").selectAll("path").style("stroke", function (d, i) {
+            if (d.id == selectedCountry) {
+                var location = codeStorage.indexOf(d.id);
+                var rawColorCode = Number(valuesInRange[location]);
+                legend.highlightLegend(rawColorCode);
+                return strokeCol;
+            }
+        })
+            .style("stroke-width", function(d,i){
+                if (d.id == selectedCountry) {
+                    return strokeWidth};
+            })
     }
-});
 }
 
-// function changeMapColor(map, data){
-//     var self = map;
-//     self.extent = d3.extent(data, self.columnVal.bind(self));
-//
-//     self.colorScale = self.properties.valueScale().domain(self.properties.domain || self.extent).range(self.properties.colors);
-//
-//     // Remove fill styles that may have been set previously.
-//     d3.select("#map").selectAll('path.unit').style('fill', null);
-//
-//     // Add new fill styles based on data values.
-//     data.forEach(function (d) {
-//         var uid = d[self.properties.unitId].trim(),
-//             val = d[self.properties.column].trim();
-//
-//         // selectAll must be called and not just select, otherwise the data
-//         // attribute of the selected path object is overwritten with self.data.
-//         var unit =  d3.select("#map").selectAll('.' + self.properties.unitPrefix + uid);
-//
-//         idOrder.push(uid);
-//
-//         // Data can contain values for non existing units and values can be empty or NaN.
-//         if (!unit.empty() && self.defined(val)) {
-//
-//             var fill = self.colorScale(val),
-//                 text = self.properties.unitTitle(unit.datum());
-//             storedColorValues.push(fill);
-//             if (self.properties.duration) unit.transition().duration(self.properties.duration).style('fill', fill);
-//             else unit.style('fill', fill);
-//
-//             // New title with column and value.
-//             val = self.properties.format(val);
-//             unit.select('title').text(text + '\n\n' + self.properties.column + ': ' + val);
-//         }
-//     });
-//
-//     if (self.properties.legend) self.drawLegend(self.properties.legend);
-//
-// //to display title, check which variable is currently displayed and based on it send the data to the function
-//     var currentVariableDisplayed = self.properties.column;
-//   titleDisplay(currentVariableDisplayed);
-// }
-//
 // //display map title on every run
 function titleDisplay (mapTitle) {
     var mapTitle;
@@ -395,8 +704,6 @@ function titleDisplay (mapTitle) {
 
 
 d3.select("#map").selectAll("text").remove()
-
-
 
     d3.select(".mapSVG")
         .append("text")
