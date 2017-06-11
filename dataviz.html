@@ -12,8 +12,8 @@
     <div class="navRight">
         <div style="margin:auto">
             <div class="navItems">
-                <a href="index.html">Works</a>
-                <a href="Resume - In Kwon Choi.docx">Resume</a>
+                <a href="work.html">Works</a>
+                <a href="blob/master/Resume%20-%20In%20Kwon%20Choi.docx?raw=true">Resume</a>
                 <!--<a href="index.html">About</a>-->
             </div>
             <div class="menuBorder"></div>
@@ -25,6 +25,31 @@
         <h1>Data Visualizations</h1></div>
 </div>
 <div class="contentsBody">
+<div>
+        <div class="vizTitle"><h2>World Happiness Map</h2></div>
+
+        <div class="flex">
+            <div class="vizText"><p>This is an interactive visualization based on data from <a class="link" href="http://worldhappiness.report/download/">World Hapiness Report 2016</a>, published by Sustainable Development Solutions Network. It contains data for approximately 160 countries in the world, from 2005 to 2015.</p>
+                <br><p>It consists of a choropleth world map, a scatterplot, a group of bar charts showing the change in all variables over 15 years, and another group of bar charts showing the value for each country for one year. It is possible to sort the countries by their names or their values in ascending order. The scatterplot and the bar chart on the right show correlation between variables, while small bar chart provides a potential trend in a single country. One can also use explore with the world map to see if the countries that are geographically close share a certain trend. </p>
+        <br><p>(For the worldmap: Codes from <a class="link" href="http://worldhappiness.report/download/">Choropleth Map: World</a> were used for drawing the base world map. I also referred to the color data provided inside the codes when I was writing my codes for choropleth map.)</p>
+            </div>
+            <div class="vizImage"> <a href="http://239cda.github.io/port/happiness/worldmap.html"><img src="image/vz4.PNG"></a></div>
+        </div>
+    </div>
+
+<div class="horizonBorder3"></div>
+    <div>
+        <div class="vizTitle"><h2>General Social Survey (1972-2014)</h2></div>
+
+        <div class="flex">
+            <div class="vizText"><p>It is a visualization of <a class="link" href="http://gss.norc.org/About-The-GSS">General Social Survey</a> data from 1972-2014. The process involved trimming down the data, designing, and coding the visualization. As the data was big in size (a csv file around 650MB), I used R to create a new csv files with variables to focus on in the visualization.</p>
+                <br><p>The objective was to explore different visualization designs that can give context to the data and stimulate insights.
+            </p>
+            </div>
+            <div class="vizImage"> <a href="http://239cda.github.io/Project3/home.html"><img src="image/viz3.PNG"></a></div>
+        </div>
+    </div>
+    <div class="horizonBorder3"></div>
     <div>
         <div class="vizTitle"><h2>United States Demographics</h2></div>
 
@@ -32,22 +57,10 @@
         <div class="vizText"><p>It is an interactive choropleth map of the United States, showing demographic data from <a href="https://www.census.gov/programs-surveys/acs/">2015 American Community Survey </a>.</p>
             <br><p>On mouseover, each state displays summarized information about the state according to each category. The bar chart complements the information by offering additional data on either median value of all states or counties, or the distribution of data in the state or county. It is possible to switch between a state map and county map, based on what the user is looking for. </p>
         <br><p>(For building the choropleth map:
-                Codes from <a href="https://bl.ocks.org/mbostock/4090848">U.S. States TopoJSON</a> and <a href="https://bl.ocks.org/mbostock/4122298"> U.S. Counties TopoJSON</a>were used for rendering the base map.)
+                Codes from <a class="link" href="https://bl.ocks.org/mbostock/4090848">U.S. States TopoJSON</a> and <a class="link" href="https://bl.ocks.org/mbostock/4122298"> U.S. Counties TopoJSON</a>were used for rendering the base map.)
             </p>
         </div>
             <div class="vizImage"><a href="http://239cda.github.io/Pro2/intro.html"><img src="image/viz2.PNG"></a></div>
-        </div>
-    </div>
-    <div class="horizonBorder3"></div>
-    <div>
-        <div class="vizTitle"><h2>General Social Survey (1972-2014)</h2></div>
-
-        <div class="flex">
-            <div class="vizText"><p>It is a visualization of <a href="http://gss.norc.org/About-The-GSS">General Social Survey</a> data from 1972-2014. The process involved trimming down the data, designing, and coding the visualization. As the data was big in size (a csv file around 650MB), I used R to create a new csv files with variables to focus on in the visualization.</p>
-                <br><p>The objective was to explore different visualization designs that can give context to the data and stimulate insights.
-            </p>
-            </div>
-            <div class="vizImage"> <a href="http://239cda.github.io/Project3/home.html"><img src="image/viz3.PNG"></a></div>
         </div>
     </div>
 </div>
