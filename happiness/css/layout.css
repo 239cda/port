@@ -58,15 +58,17 @@ html, body{
 
 }
 .menu{
-    margin: 0px 0px 0px 0px;
+    margin: 0px 200px 0px 0px;
     display:flex;
-    /*max-width:700px;*/
+    /*border-style: solid;*/
+    /*max-width:1000px;*/
   }
 #map{
     width:530px;
     height:220px;
     position:relative;
     top:10px;
+    left:-10px;
     /*border-style: solid;*/
 
 }
@@ -76,7 +78,7 @@ html, body{
     display:flex;
 }
 #top{
-
+display:flex;
 }
 
 #pageTitle{
@@ -185,7 +187,7 @@ p {
 
 #yAxisHighlight{
     width:50px;
-    height:300px;
+    height:240px;
     border-style: dashed;
     border-color:blue;
     border-width:3px;
@@ -196,7 +198,7 @@ p {
     top:0px;
 }
 #xAxisHighlight{
-    width:260px;
+    width:250px;
     height:50px;
     border-style: dashed;
     border-color:blue;
@@ -205,7 +207,7 @@ p {
     display:none;
     position:absolute;
     left:50px;
-    top:240px;
+    top:220px;
 }
 
 .axis path, .axis line {
@@ -343,9 +345,10 @@ p {
 #legendSVG{
     /*border-style: solid;*/
     height:220px;
-    width:45px;
+    width:70px;
     position:relative;
     top:10px;
+    left:-10px;
 }
 .legendRect{
     display:block;
@@ -373,14 +376,16 @@ rect.hidden{
     fill:green;
 }
 .emptyDivMap{
-    width:650px;
-    height: 250px;
+    width:525px;
+    height: 200px;
     border-style: dashed;
     border-color:blue;
     border-width:3px;
     border-radius: 5px;
     display:none;
     position:absolute;
+    left:90px;
+
 }
 .emptyDivEntireBar{
     border-style: dashed;
@@ -400,17 +405,17 @@ rect.hidden{
 
 }
 .timeChartSVG{
-    border-style: solid;
-    border-width:1px;
+    /*border-style: solid;*/
+    /*border-width:1px;*/
     height: 55px;
-    padding: 1px 0px 0px 20px;
+    padding: 1px 0px 0px 28px;
     width:350px;
-    margin:0px;
+    margin:2px;
 }
 .axisSVG{
     height:100px;
     margin:0px;
-    width:350px;
+    width:370px;
 }
 
 .timeDiv{
@@ -418,6 +423,8 @@ rect.hidden{
     /*border-color: #fd7d4f;*/
     width: 350px;
     height:100%;
+    position:relative;
+    top:-20px;
 
 }
 .line {
@@ -431,8 +438,19 @@ rect.hidden{
 .timeChartLabel{
     display:block;
     position:relative;
-    top: -17px;
-    left:250px;
+    top: -9px;
+    left:260px;
+    font-size:12px;
+    padding:0px;
+    margin:0px;
+    height:0px;
+    /*z-index: 99*/
+}
+#timeLabel7{
+    display:block;
+    position:relative;
+    top: -19px;
+    left:260px;
     font-size:12px;
     padding:0px;
     margin:0px;
@@ -444,12 +462,16 @@ rect.hidden{
     width:20px;
     position:relative;
     top: -350px;
-    left: -50px;
+    left: -60px;
     border-style: solid;
 }
 #sliderScatterY{
     transform: rotate(90deg);
-    height:220px;
+    /*height:220px;*/
+    /*position: absolute;*/
+    /*left:0px;*/
+    /*top:-350px;*/
+    /*!*display:none;*!*/
 }
 #sliderScatterX{
     width:220px;
@@ -457,8 +479,14 @@ rect.hidden{
 #sliderDivScatterX{
     height:20px;
     position:relative;
-    top: -290px;
+    top: -65px;
     left: 60px;
+}
+#sliderDivScatterY{
+    width:20px;
+    position:absolute;
+    top: 110px;
+    /*left: 2160px;*/
 }
 #tooltipTime{
     position: absolute;
@@ -479,6 +507,6 @@ rect.hidden{
 .mapTitle{
     position:absolute;
     left:275px;
-    top:170px;
+    top:160px;
     /*font-size: 2px;0*/
 }

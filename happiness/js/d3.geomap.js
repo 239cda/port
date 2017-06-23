@@ -24,7 +24,7 @@ function addAccessor(obj, name, value) {
     };
 }
 function mapColor(selectedBar) {
-    selectedCountry = selectedBar;
+        selectedCountry = selectedBar;
         hoverCountry(selectedCountry);
 }
 
@@ -233,6 +233,29 @@ var Geomap = (function () {
 
 
                 })
+                    .attr("d", self.path).on("mouseout", function(d)
+                {
+                    d3.select("#tooltipMap").classed("hiddenMap", true);
+                    countryID = d.id;
+                    var thisCountry = countryID;
+
+                    d3.selectAll(".unit").style("fill", function (d) {
+                        if (d.id == currentCountry) {
+                            var location = codeStorage.indexOf(d.id);
+                            var rawColorCode = Number(valuesInRange[location]);
+                            // legend.highlightLegend(rawColorCode);
+                            return highlightCol;
+                        }
+                        else {
+                            var codeIndex = codeStorage.indexOf(d.id);
+                            if (codeIndex >= 0) {
+                                var _colorCode = valuesInRange[codeIndex];
+                                return returnColor(_colorCode);
+                            }
+                        }
+                    })
+
+                })
                     .attr('d', self.path).on('click', function(d){
 
                     //save selected country and keep highlight. keep showing this country for scatterplot and line chart.
@@ -379,16 +402,16 @@ var getColorValue = (function(){
         //display a label for a map
         d3.select("#map").selectAll("text").remove();
 
-
         var mapTitle = variable;
         if (mapTitle == "gini of household income reported in Gallup, by wp5-year") {mapTitle = "GINI Index";}
         else if(mapTitle == "Healthy life expectancy at birth") {mapTitle = "Healthy Life Expectancy";}
         else if(mapTitle == "Life Ladder") {mapTitle = "Happiness Score";}
+        else if(mapTitle == categories[1]){mapTitle = "GDP per Capita"}
 
         d3.select("#map").append("text")
             // .attr("x", 600)
-            // .attr("y", 600)
-            .style("font-size", "20px")
+            // .attr("y", 600)`
+            .style("font-size", "18px")
             .style("fill", "grey")
             .text(mapTitle)
             .attr("class","mapTitle");
@@ -404,7 +427,10 @@ var getColorValue = (function(){
             }
         };
 
+        legend.getVar(variable);
+
         if(variable == categories[1]){
+            // legend.legendForGDP();
             //run a different function that converts the values to inverse log first
             getValueGDP(_values);
         }
@@ -461,23 +487,23 @@ var getColorValue = (function(){
 function scaleValues(scale){
     var values = [];
 
-
     for(var i=1;i<10;i++){
         var v = scale.invert(i);
         values.push(v.toFixed(2));
     }
+
         receiveLegendValues(values);
 }
 function getValueGDP(data) {
     var _convertedVal = data;
     var _convertedValLegend = [];
+
     for(var i = 0;i<_convertedVal.length;i++){
             _convertedVal[i] = Number(_convertedVal[i]);
             _convertedValLegend[i] = Math.exp(Number(_convertedVal[i]));
     }
     var _max = d3.max(_convertedVal);
     var _min = d3.min(_convertedVal);
-
 
     var _maxLeg = d3.max(_convertedValLegend);
     var _minLeg = d3.min(_convertedValLegend);
@@ -493,7 +519,7 @@ function getValueGDP(data) {
 
     //find out which values are at the borderline and send them to the function at legend.js
     scaleValues(_scaleValue);
-    scaleValues(_scaleValueLeg);
+    // scaleValues(_scaleValueLeg);
 
     //as a result, _scaleValue will return a number bw 1-9
     for (var i = 0; i < _convertedVal.length; i++) {

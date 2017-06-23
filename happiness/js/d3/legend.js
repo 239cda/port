@@ -1,27 +1,38 @@
 /**
  * Created by InKwon on 2017-05-10.
  */
+
+
+
 function receiveLegendValues(values){
     var receivedValues = values;
     legend.legendText(receivedValues)
 }
-function receiveLegendValuesGDP(values){
-    var receivedValues = values;
-    for(var i = 0;i<receivedValues.length;i++){
-        if(Number(receivedValues[i])>0){
-            receivedValues[i] = Math.exp(Number(receivedValues[i]));
-        }
-        else{receivedValues[i] = null}
-    }
+// function receiveLegendValuesGDP(values){
+//     var receivedValues = values;
+//     for(var i = 0;i<receivedValues.length;i++){
+//         if(Number(receivedValues[i])>0){
+//             receivedValues[i] = Math.exp(Number(receivedValues[i]));
+//         }
+//         else{receivedValues[i] = null}
+//     }
+//     legend.legendText(receivedValues);
+// }
 
-console.log(receivedValues)
-    legend.legendText(receivedValues);
-}
 var legend = (function(){
     var _width = 600;
     var _height = 15;
     var _eachW = _width/30;
     var _colorCode = ["#f7fbff", "#deebf7", "#c6dbef", "#9ecae1", "#6baed6", "#4292c6", "#2171b5", "#08519c", "#08306b"];
+    var isGDP;
+    var variable;
+
+function _legendForGDP(){
+    isGDP = true;
+}
+function _getVar(v){
+    variable = v;
+}
 
 function _drawLegend (){
     var svg = d3.select("#legendSVG");
@@ -58,16 +69,39 @@ function _drawLegend (){
 
       svg.selectAll("text").remove();
 
-      svg.selectAll("text")
-          .data(data)
-          .enter()
-          .append("text")
-          .attr("y", function (d, i) {return _eachW * i + 20;})
-          .attr("x", 20)
-          .attr("fill", "black")
-          .attr("font-size", 90)
-          .text(function(d,i){return data[i];})
-  }
+   if(variable == categories[1]) {
+       svg.selectAll("text")
+           .data(data)
+           .enter()
+           .append("text")
+           .attr("y", function (d, i) {
+               return _eachW * i + 20;
+           })
+           .attr("x", 20)
+           .attr("fill", "black")
+           .attr("font-size", 90)
+           .text(function (d, i) {
+               var comma = d3.format(",f");
+               return "$"+ comma(d3.round(Math.exp(Number(data[i])), 2));
+           })
+
+   }
+   else {
+       svg.selectAll("text")
+           .data(data)
+           .enter()
+           .append("text")
+           .attr("y", function (d, i) {
+               return _eachW * i + 20;
+           })
+           .attr("x", 20)
+           .attr("fill", "black")
+           .attr("font-size", 90)
+           .text(function (d, i) {
+               return data[i];
+           })
+   }
+   }
   function _highlightLegend(value){
 
       var svg = d3.select("#legendSVG");
@@ -84,7 +118,9 @@ function _drawLegend (){
   return{
       drawLegend:_drawLegend,
       legendText:_legendText,
-      highlightLegend:_highlightLegend
+      highlightLegend:_highlightLegend,
+      legendForGDP: _legendForGDP,
+      getVar:_getVar
   }
 
 })();

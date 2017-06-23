@@ -1,22 +1,22 @@
 var brushOn = false;
 
 function callBrush(minMax) {
-    var _scatterH = 350;
+    var _scatterH = 300;
     var _padding = 30;
     var svg = d3.select("#SVGScatter").append("svg")
         .attr("width", _scatterH)
         .attr("height",_scatterH)
         .attr("class", "brushSVG")
-        .attr("transform", "translate(300, 0)")
+        .attr("transform", "translate(0, 0)")
 
 //send min/max to here
     var y = d3.scale.linear()
         .domain([minMax[1], minMax[3]])
-        .range([_scatterH - _padding - 10, 0]);
+        .range([_scatterH - _padding - 20, 0]);
 
     var x = d3.scale.linear()
         .domain([minMax[0], minMax[2]])
-        .range([_padding, _scatterH - 20]);
+        .range([_padding + 20, _scatterH]);
 
     var brush = d3.svg.brush()
         .x(x)
@@ -63,16 +63,6 @@ function callBrush(minMax) {
             d3.select("#SVGScatter").selectAll(".hidden").classed("hidden", false)
                 .attr("fill", "grey");
         }
-
-            //
-            // d3.select("#SVG1").selectAll("rect").attr("fill", "grey");
-            // d3.select("#SVG2").selectAll("rect").attr("fill", "grey");
-            // d3.select("#SVG3").selectAll("rect").attr("fill", "grey");
-            // d3.select("#SVG4").selectAll("rect").attr("fill", "grey");
-            // d3.select("#SVG5").selectAll("rect").attr("fill", "grey");
-            // d3.select("#SVG6").selectAll("rect").attr("fill", "grey");
-            // d3.select("#SVG7").selectAll("rect").attr("fill", "grey");
-
     }
 
 };

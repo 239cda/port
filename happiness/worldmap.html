@@ -17,6 +17,8 @@
     <script src="js/d3/app.js"></script>
     <script src="js/d3/brush.js"></script>
     <script src="js/d3/timeChart.js"></script>
+    <script src="js/d3/sync.js"></script>
+    <script src="js/d3/log.js"></script>
 
 
 </head>
@@ -34,7 +36,9 @@
             <div class="subC" id="expectancy" onclick="changeVarMap(categories[5])" onmouseover="whatIsThisVariable(5)" draggable="true" ondragstart="drag(categories[5], 'barDiv6')" ondragend="removeLines()"><p>Social Support</p></div>
             <div class="subC" id="support" onclick="changeVarMap(categories[6])" onmouseover="whatIsThisVariable(6)" draggable="true" ondragstart="drag(categories[6], 'barDiv7')" ondragend="removeLines()"><p>Healthy Life Expectancy</p></div>
         </div>
-
+    </div>
+    <div class = "logButton">
+        <button onclick="logEvent.viewLog()">View a log</button>
     </div>
 </div>
 
@@ -51,8 +55,8 @@
             <p id="variableExplanation"> </p>
         </div>
     <div id="tooltipMap" class="hiddenMap"><p><span id="valueMap">100</span></p></div>
-    <div class = "emptyDivMap" ondragover="allowDrop(event)" ondrop="dropMap()"></div>
     <div id="map" ></div>
+        <div class = "emptyDivMap" ondragover="allowDrop(event)" ondrop="dropMap()"></div>
     <div class="legend">
         <svg id="legendSVG"></svg></div>
     </div>
@@ -124,8 +128,6 @@
         <p><span id="valueScatter">100</span></p>
     </div>
     <svg id="SVGScatter" ondragover="dragDropScatter.allowDropScatter(event)" ondrop="dragDropScatter.dropScatter()"></svg>
-    <div id="yAxisHighlight" class="highlight" ondragover="allowDrop(event)" ondrop="dragDropScatter.dropScatter()"></div>
-    <div id="xAxisHighlight" class="highlight" ondragover="allowDrop(event)" ondrop="dragDropScatter.dropScatter()"></div>
 
     <div id="sliderDivScatterY" class="slideScatterDiv">
         <input type="range"  id="sliderScatterY" value="0" onclick="scatterChange()">
@@ -134,32 +136,35 @@
     <div id="sliderDivScatterX" class="sliderScatterDiv">
         <input type="range" id="sliderScatterX" value="0" onclick="scatterChange()">
     </div>
+    <div id="yAxisHighlight" class="highlight" ondragover="allowDrop(event)" ondrop="dragDropScatter.dropScatter()"></div>
+    <div id="xAxisHighlight" class="highlight" ondragover="allowDrop(event)" ondrop="dragDropScatter.dropScatter()"></div>
+
 
 
 </div>
 <!--<div class="timeDiv" onmouseover="showLabel()" onmouseout="hideLabel()">-->
 <div class="timeDiv">
 
-        <svg id="Time1" class="timeChartSVG" ></svg>
-        <p class="timeChartLabel">Happiness Score</p>
+        <svg id="Time1" class="timeChartSVG" onmouseover="hideLabel(1)" onmouseout="showLabel(1)"></svg>
+        <p class="timeChartLabel" id = "timeLabel1">Happiness Score</p>
 
-        <svg id="Time2" class="timeChartSVG" ></svg>
-        <p class="timeChartLabel">Log GDP per capita</p>
+        <svg id="Time2" class="timeChartSVG" onmouseover="hideLabel(2)" onmouseout="showLabel(2)"></svg>
+        <p class="timeChartLabel" id="timeLabel2">GDP per capita</p>
 
-        <svg id="Time3" class="timeChartSVG" ></svg>
-        <p class="timeChartLabel">GINI Index</p>
+        <svg id="Time3" class="timeChartSVG" onmouseover="hideLabel(3)" onmouseout="showLabel(3)"></svg>
+        <p class="timeChartLabel" id="timeLabel3">GINI Index</p>
 
-        <svg id="Time4" class="timeChartSVG" ></svg>
-        <p class="timeChartLabel" >Perception of corruption</p>
+        <svg id="Time4" class="timeChartSVG" onmouseover="hideLabel(4)" onmouseout="showLabel(4)"></svg>
+        <p class="timeChartLabel" id="timeLabel4">Perception of corruption</p>
 
-        <svg id="Time5" class="timeChartSVG" ></svg>
-        <p class="timeChartLabel">Democratic Quality</p>
+        <svg id="Time5" class="timeChartSVG" onmouseover="hideLabel(5)" onmouseout="showLabel(5)"></svg>
+        <p class="timeChartLabel" id="timeLabel5">Democratic Quality</p>
 
-        <svg id="Time6" class="timeChartSVG" ></svg>
-        <p class="timeChartLabel">Social support</p>
+        <svg id="Time6" class="timeChartSVG" onmouseover="hideLabel(6)" onmouseout="showLabel(6)" ></svg>
+        <p class="timeChartLabel" id="timeLabel6">Social support</p>
 
-        <svg id="Time7" class="timeChartSVG"></svg>
-        <p class="timeChartLabel">Healthy life expectancy</p>
+        <svg id="Time7" class="timeChartSVG" onmouseover="hideLabel(7)" onmouseout="showLabel(7)"></svg>
+        <p class="timeChartLabel" id="timeLabel7">Healthy life expectancy</p>
 
     <svg id="Time8" class="axisSVG"></svg>
     <div id="tooltipTime" class="hidden">
@@ -169,7 +174,7 @@
 </div>
 <script>
 //var countryID;
-    var _svgW = 650;
+    var _svgW = 630;
     var _svgH = 80;
 var singleYearData = [];
 var Data;
@@ -186,6 +191,8 @@ var categories = ["Life Ladder",	"Log GDP per capita",	"gini of household income
     "Democratic Quality","Social support", "Healthy life expectancy at birth" ];
 var currentScatterX = categories[0]
 var currentScatterY = categories[1]
+
+//mouse events will be recorded in this array
 
 //this function runs at the start of this application
 //draws everything on page
@@ -220,6 +227,7 @@ var drawMap = (function() {
                               name: currentName,
                               var1: Data[i][categories[0]],
                               var2: Data[i][categories[1]],
+                              var2_ori:Math.exp(Data[i][categories[1]]),
                               var3: Data[i][categories[2]],
                               var4: Data[i][categories[3]],
                               var5: Data[i][categories[4]],
@@ -238,6 +246,7 @@ var drawMap = (function() {
                                 name: lastName,
                                 var1: 0,
                                 var2: 0,
+                                var2_ori:0,
                                 var3: 0,
                                 var4: 0,
                                 var5: 0,
@@ -255,32 +264,6 @@ var drawMap = (function() {
                   };
 
                   };
-
-
-
-
-//                      if(totalCountries.indexOf(Data[i]["Country Code"]) >=0){
-//                      combinedData.push({
-//                      var1: Data[i][categories[0]],
-//                      var2: Data[i][categories[1]],
-//                      var3: Data[i][categories[2]],
-//                      var4: Data[i][categories[3]],
-//                      var5: Data[i][categories[4]],
-//                      var6: Data[i][categories[5]],
-//                      var7: Data[i][categories[6]]
-//                      })
-//                      }
-//                      else{
-//                          combinedData.push({
-//                              var1: 0,
-//                              var2: 0,
-//                              var3: 0,
-//                              var4: 0,
-//                              var5: 0,
-//                              var6: 0,
-//                              var7: 0
-//                          })
-//                      };
 
               //for code, give same code for same country for each year;
               for(var i=0; i<singleYearData.length;i++){
@@ -556,8 +539,6 @@ function yearChange(){
         singleYearData[i].code = i;
     }
 
-
-
     for(var i=0;i<Data.length;i++) {
         //also find out total list of countries by its code and save it
         var currentCode = Data[i]["Country Code"];
@@ -571,6 +552,7 @@ function yearChange(){
                 name: currentName,
                 var1: Data[i][categories[0]],
                 var2: Data[i][categories[1]],
+                var2_ori:Math.exp(Data[i][categories[1]]),
                 var3: Data[i][categories[2]],
                 var4: Data[i][categories[3]],
                 var5: Data[i][categories[4]],
@@ -589,6 +571,7 @@ function yearChange(){
                     name: lastName,
                     var1: 0,
                     var2: 0,
+                    var2_ori:0,
                     var3: 0,
                     var4: 0,
                     var5: 0,
@@ -607,9 +590,6 @@ function yearChange(){
 
     };
 
-
-
-
 //to find out what variable is currently being displayed
     if(currentVar[0]==undefined){
         mapVar = categories[0]
@@ -618,14 +598,14 @@ function yearChange(){
         mapVar = currentVar[0];
     }
 
-//    getColorValue.getRawValues(singleYearData, mapVar);
     getColorValue.getRawValues(combinedData, mapVar);
     getColorValue.recolorMap();
 
-    updateBar(singleYearData, barMax, barMin, categories[0], categories[1], categories[2], categories[3], categories[4], categories[5], categories[6]);
+//    updateBar(singleYearData, barMax, barMin, categories[0], categories[1], categories[2], categories[3], categories[4], categories[5], categories[6]);
+    drawBar.updateYear();
     drawScatter(singleYearData, currentScatterX, currentScatterY);
-
 }
+
 //function for changing contents for explanation
 function whatIsThisVariable(variableNum){
 
@@ -646,8 +626,9 @@ function whatIsThisVariable(variableNum){
     }
 }
 function dropMap(){
-        getColorValue.getRawValues(singleYearData, currentVar[0]);
-//        getColorValue.recolorMap();
+
+        getColorValue.getRawValues(combinedData, currentVar[0]);
+        getColorValue.recolorMap();
 }
 function changeVarMap(variable){
     currentVar[0] = variable;
@@ -666,11 +647,13 @@ function getBarChartScale(Data, singleYearData){
         cate0.push(Number(Data[i][categories[0]]));}
         if(Data[i][categories[1]] > 0) {
         cate1.push(Number(Data[i][categories[1]]));}
+//        if(Data[i][categories[1]] > 0) {
+//        cate1.push(Math.exp(Number(Data[i][categories[1]])));}
         if(Data[i][categories[2]] > 0) {
         cate2.push(Number(Data[i][categories[2]]));}
         if(Data[i][categories[3]] > 0) {
         cate3.push(Number(Data[i][categories[3]]));}
-        if(Data[i][categories[4]] > 0) {
+        if(Data[i][categories[4]] != '') {
         cate4.push(Number(Data[i][categories[4]]));}
         if(Data[i][categories[5]] > 0) {
         cate5.push(Number(Data[i][categories[5]]));}
@@ -699,7 +682,9 @@ function getBarChartScale(Data, singleYearData){
     var _max = [cate0Max, cate1Max, cate2Max, cate3Max, cate4Max, cate5Max, cate6Max];
     var _min = [cate0Min, cate1Min, cate2Min, cate3Min, cate4Min, cate5Min, cate6Min];
 
-    drawBar(singleYearData, _max, _min, categories[0], categories[1], categories[2], categories[3], categories[4], categories[5], categories[6]);
+    drawBar.getDataBar(singleYearData, _max, _min);
+    drawBar.drawBar(combinedData);
+//    drawBar(singleYearData, _max, _min, categories[0], categories[1], categories[2], categories[3], categories[4], categories[5], categories[6]);
     barMax = _max;
     barMin = _min;
 
@@ -744,8 +729,25 @@ function scatterChange(){
 
     currentScatterVar[0] = categories[variableX];
     currentScatterVar[1] = categories[variableY];
+
+    currentScatterX = categories[variableX];
+    currentScatterY = categories[variableY];
+
     drawScatter(singleYearData, categories[variableX], categories[variableY]);
 }
+//for hiding and showing label for time chart when mouse cursor is on the time chart svg
+function hideLabel(num){
+////var svgNum = "Time" + num;
+//var lblNum = "timeLabel" + num;
+//
+//$("#"+lblNum).css("display", "none");
+}
+function showLabel(num){
+//    var lblNum = "timeLabel" + num;
+//
+//    $("#"+lblNum).css("display", "block");
+}
+
 scatterSliderInit();
 drawMap.fetchCSV(categories[0], currentYear);
 
