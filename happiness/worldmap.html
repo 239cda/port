@@ -28,18 +28,21 @@
 <div id="top">
     <div class="menu">
         <div class="containerWithBorder1 menu">
-            <div class="subC" id="hScoreSub" onclick="changeVarMap(categories[0])" onmouseover="whatIsThisVariable(0)" draggable="true" ondragstart="drag(categories[0], 'barDiv1')" ondragend="removeLines()"><p>Happiness Score</p></div>
-            <div class="subC" id="gdp" onclick="changeVarMap(categories[1])" onmouseover="whatIsThisVariable(1)" draggable="true" ondragstart="drag(categories[1], 'barDiv2')" ondragend="removeLines()"><p>GDP per capita</p></div>
-            <div class="subC" id="gini" onclick="changeVarMap(categories[2])" onmouseover="whatIsThisVariable(2)" draggable="true" ondragstart="drag(categories[2], 'barDiv3')" ondragend="removeLines()"><p>GINI Index</p></div>
-            <div class="subC" id="corruption" onclick="changeVarMap(categories[3])" onmouseover="whatIsThisVariable(3)" draggable="true" ondragstart="drag(categories[3], 'barDiv4')" ondragend="removeLines()"><p>Perception of Corruption</p></div>
-            <div class="subC" id="democracy" onclick="changeVarMap(categories[4])" onmouseover="whatIsThisVariable(4)" draggable="true" ondragstart="drag(categories[4], 'barDiv5')" ondragend="removeLines()"><p>Democratic Quality</p></div>
-            <div class="subC" id="expectancy" onclick="changeVarMap(categories[5])" onmouseover="whatIsThisVariable(5)" draggable="true" ondragstart="drag(categories[5], 'barDiv6')" ondragend="removeLines()"><p>Social Support</p></div>
-            <div class="subC" id="support" onclick="changeVarMap(categories[6])" onmouseover="whatIsThisVariable(6)" draggable="true" ondragstart="drag(categories[6], 'barDiv7')" ondragend="removeLines()"><p>Healthy Life Expectancy</p></div>
+            <div class="subC" id="hScoreSub" onclick="changeVarMap(categories[0])" onmouseenter="whatIsThisVariable(0);" onmouseleave="menuHoverEnd(0)" draggable="true" ondragstart="drag(categories[0], 'barDiv1')" ondragend="removeLines(categories[0])"><p>Happiness Score</p></div>
+            <div class="subC" id="gdp" onclick="changeVarMap(categories[1])" onmouseenter="whatIsThisVariable(1)" onmouseleave="menuHoverEnd(1)" draggable="true" ondragstart="drag(categories[1], 'barDiv2')" ondragend="removeLines(categories[1])"><p>GDP per capita</p></div>
+            <div class="subC" id="gini" onclick="changeVarMap(categories[2])" onmouseenter="whatIsThisVariable(2)" onmouseleave="menuHoverEnd(2)" draggable="true" ondragstart="drag(categories[2], 'barDiv3')" ondragend="removeLines(categories[2])"><p>GINI Index</p></div>
+            <div class="subC" id="corruption" onclick="changeVarMap(categories[3])" onmouseenter="whatIsThisVariable(3)" onmouseleave="menuHoverEnd(3)" draggable="true" ondragstart="drag(categories[3], 'barDiv4')" ondragend="removeLines(categories[3])"><p>Perception of Corruption</p></div>
+            <div class="subC" id="democracy" onclick="changeVarMap(categories[4])" onmouseenter="whatIsThisVariable(4)" onmouseleave="menuHoverEnd(4)" draggable="true" ondragstart="drag(categories[4], 'barDiv5')" ondragend="removeLines(categories[4])"><p>Democratic Quality</p></div>
+            <div class="subC" id="expectancy" onclick="changeVarMap(categories[5])" onmouseenter="whatIsThisVariable(5)" onmouseleave="menuHoverEnd(5)" draggable="true" ondragstart="drag(categories[5], 'barDiv6')" ondragend="removeLines(categories[5])"><p>Social Support</p></div>
+            <div class="subC" id="support" onclick="changeVarMap(categories[6])" onmouseenter="whatIsThisVariable(6)" onmouseleave="menuHoverEnd(6)" draggable="true" ondragstart="drag(categories[6], 'barDiv7')" ondragend="removeLines(categories[6])"><p>Healthy Life Expectancy</p></div>
         </div>
     </div>
     <div class = "logButton">
-        <button onclick="logEvent.viewLog()">View a log</button>
+        <button onclick="logEvent.viewLog()">Save a log</button>
     </div>
+    <!--<div class = "logButton">-->
+        <!--<button onclick="DATA.exportCSV()">download a log</button>-->
+    <!--</div>-->
 </div>
 
 <!--div at the left-->
@@ -66,9 +69,6 @@
 
 <!--div at the right-->
 <div id="right">
-
-    <!--<div class="emptyDivEntireBar">-->
-
     <div id="emptyDiv1" class="emptyDivs" ondragover="getDivNum(event, 'barDiv1', 'emptyDiv1')" ondrop="moveDiv()"></div>
     <div class=barDiv id = barDiv1  onmouseover="displayButton()" onmouseout="hideButton()" ondragover="allowDropDiv(event, 'barDiv1')" ondragstart="dragDiv('barDiv1', 'emptyDiv1')">
         <div class="relative">
@@ -117,11 +117,9 @@
         <img class="sortIcon" id = "sort7" src="img/sort.png">
     </div>
 
-<!--</div>-->
     </div>
-
 </div>
-<!--div at the bottom-->
+
 <div id="bottom" >
 <div class="scatterDiv">
     <div id="tooltipScatter" class="hidden">
@@ -142,28 +140,28 @@
 
 
 </div>
-<!--<div class="timeDiv" onmouseover="showLabel()" onmouseout="hideLabel()">-->
+
 <div class="timeDiv">
 
-        <svg id="Time1" class="timeChartSVG" onmouseover="hideLabel(1)" onmouseout="showLabel(1)"></svg>
+        <svg id="Time1" class="timeChartSVG" ></svg>
         <p class="timeChartLabel" id = "timeLabel1">Happiness Score</p>
 
-        <svg id="Time2" class="timeChartSVG" onmouseover="hideLabel(2)" onmouseout="showLabel(2)"></svg>
+        <svg id="Time2" class="timeChartSVG" ></svg>
         <p class="timeChartLabel" id="timeLabel2">GDP per capita</p>
 
-        <svg id="Time3" class="timeChartSVG" onmouseover="hideLabel(3)" onmouseout="showLabel(3)"></svg>
+        <svg id="Time3" class="timeChartSVG" ></svg>
         <p class="timeChartLabel" id="timeLabel3">GINI Index</p>
 
-        <svg id="Time4" class="timeChartSVG" onmouseover="hideLabel(4)" onmouseout="showLabel(4)"></svg>
+        <svg id="Time4" class="timeChartSVG" ></svg>
         <p class="timeChartLabel" id="timeLabel4">Perception of corruption</p>
 
-        <svg id="Time5" class="timeChartSVG" onmouseover="hideLabel(5)" onmouseout="showLabel(5)"></svg>
+        <svg id="Time5" class="timeChartSVG" ></svg>
         <p class="timeChartLabel" id="timeLabel5">Democratic Quality</p>
 
-        <svg id="Time6" class="timeChartSVG" onmouseover="hideLabel(6)" onmouseout="showLabel(6)" ></svg>
+        <svg id="Time6" class="timeChartSVG"  ></svg>
         <p class="timeChartLabel" id="timeLabel6">Social support</p>
 
-        <svg id="Time7" class="timeChartSVG" onmouseover="hideLabel(7)" onmouseout="showLabel(7)"></svg>
+        <svg id="Time7" class="timeChartSVG" ></svg>
         <p class="timeChartLabel" id="timeLabel7">Healthy life expectancy</p>
 
     <svg id="Time8" class="axisSVG"></svg>
@@ -189,8 +187,8 @@ var totalCountriesName = [];
 var combinedData = [];
 var categories = ["Life Ladder",	"Log GDP per capita",	"gini of household income reported in Gallup, by wp5-year", "Perceptions of corruption",
     "Democratic Quality","Social support", "Healthy life expectancy at birth" ];
-var currentScatterX = categories[0]
-var currentScatterY = categories[1]
+var currentScatterX = categories[0];
+var currentScatterY = categories[1];
 
 //mouse events will be recorded in this array
 
@@ -198,7 +196,6 @@ var currentScatterY = categories[1]
 //draws everything on page
 var drawMap = (function() {
       var _fetchCSV = function(variable, currentYear) {
-//          var map = d3.geomap.choropleth()
 
           var map = d3.geomap()
               .geofile('topojson/world/countries.json')
@@ -234,7 +231,7 @@ var drawMap = (function() {
                               var6: Data[i][categories[5]],
                               var7: Data[i][categories[6]],
                               year: Data[i]["year"]
-                          })
+                          });
                           totalCountries.push(currentCode);
                           totalCountriesName.push(currentName);
                       }
@@ -253,7 +250,7 @@ var drawMap = (function() {
                                 var6: 0,
                                 var7: 0,
                                 year: currentYear
-                            })
+                            });
                             totalCountries.push(lastValue);
                             totalCountriesName.push(lastName);
                       }else{};
@@ -262,7 +259,6 @@ var drawMap = (function() {
                     lastName = currentName;
                       valueIn = false;
                   };
-
                   };
 
               //for code, give same code for same country for each year;
@@ -272,16 +268,14 @@ var drawMap = (function() {
 
               getBarChartScale(Data, singleYearData);
               getColorValue.getRawValues(combinedData, variable);
-//              getColorValue.getRawValues(singleYearData, variable);
 
               if (error) throw error;
               d3.select('#map')
                   .datum(singleYearData)
-                  .call(map.draw, map)
+                  .call(map.draw, map);
 
               drawScatter(singleYearData, currentScatterX, currentScatterY);
               legend.drawLegend();
-
           });
       };
 
@@ -299,31 +293,30 @@ var drag = function(variable, barDivNum) {
     currentVar[0] = variable;
     currentDivID = barDivNum;
 
-
     $(".emptyDivMap").css("display", "block");
     $("#yAxisHighlight").css("display", "block");
     $("#xAxisHighlight").css("display", "block");
     $(".emptyDivEntireBar").css("display", "block");
+    logEvent.log(variable, null, currentYear, 5, 6);
 }
 
-function removeLines(){
+function removeLines(variable){
     $(".emptyDivMap").css("display", "none");
     $("#yAxisHighlight").css("display", "none");
     $("#xAxisHighlight").css("display", "none");
     $(".emptyDivEntireBar").css("display", "none");
+    logEvent.log(variable, null, currentYear, 5, 7);
 }
 
 var dragDiv = function(variable, emptyDivNum){
     currentDivID = variable;
     currentEmptyDivID = emptyDivNum;
-
+    logEvent.log(variable, null, currentYear, 0, 6);
 }
-//
-//
+
 function allowDrop(ev) {
     ev.preventDefault();
 }
-
 
 var dragDropScatter = (function(){
     var whichAxis = -1;
@@ -337,8 +330,6 @@ function _allowDropScatter(ev) {
 
     //which axis var is changed?
     // 0 == x axis, 1 = y axis;
-
-
         if (x < 200) {
             whichAxis = 1;
             $("#yAxisHighlight").css("display", "block");
@@ -374,16 +365,14 @@ var _dropScatter = function () {
 
             currentScatterVar[0] = currentVar[0];
             currentScatterVar[1] = scatterY;
+
+            logEvent.log(currentScatterVar, null, currentYear, 5, 8);
         }
-
     }
-
     return{
     dropScatter:_dropScatter,
         allowDropScatter:_allowDropScatter
 }
-
-
 })();
 
 //on dragover
@@ -418,6 +407,7 @@ function allowDropDiv(ev, variable) {
         $(".emptyDivs").css("display", "none");
         $("#emptyDiv7").css("display", "block");
     }
+    logEvent.log(variable, null, currentYear, 0, 7);
 }
 
 //drag
@@ -433,7 +423,6 @@ function getDivNum(ev, divName, divContainerName){
     ev.preventDefault();
     beforeThisDiv = divName;
     beforeThisContainerDiv = divContainerName;
-
 }
 
 //on drop, it puts the bar graph div in the location designed by blue lined rect.
@@ -443,17 +432,15 @@ function moveDiv(){
     var movingBarDiv = document.getElementById(currentDivID);
     var movingContainerBarDiv = document.getElementById(currentEmptyDivID);
 
-//console.log("moving div", movingBarDiv)
-//console.log("before this div", thisBarDiv)
-
     $(thisContainerDiv).before($(movingBarDiv));
     $(movingBarDiv).before($(movingContainerBarDiv));
     $(".emptyDivs").css("display", "none");
 
+    var cateNum = parseInt(beforeThisDiv);
+    logEvent.log(cateNum, null, currentYear, 0, 8);
 }
 
 //overlaying button
-
 var displayButton = function () {
     $("#sort1").css("display","block");
 };
@@ -497,7 +484,6 @@ var hideButton7 = function () {
     $("#sort7").css("display","none");
 };
 //slider
-
 var timeSlider = document.getElementById("slider");
 timeSlider.min = 0;
 timeSlider.max = 10;
@@ -587,7 +573,6 @@ function yearChange(){
             lastName = currentName;
             valueIn = false;
         };
-
     };
 
 //to find out what variable is currently being displayed
@@ -601,14 +586,15 @@ function yearChange(){
     getColorValue.getRawValues(combinedData, mapVar);
     getColorValue.recolorMap();
 
-//    updateBar(singleYearData, barMax, barMin, categories[0], categories[1], categories[2], categories[3], categories[4], categories[5], categories[6]);
     drawBar.updateYear();
     drawScatter(singleYearData, currentScatterX, currentScatterY);
+    logEvent.log(mapVar, null, currentYear,4, 11);
 }
 
 //function for changing contents for explanation
 function whatIsThisVariable(variableNum){
-
+    var num = categories[variableNum];
+    logEvent.log(num, null, null,5, 12);
     if(variableNum == 0){
         $("#variableExplanation").html("Happiness score or subjective well-being. The participants gave score to their current lives, with score 10 as the best possible life, and 0 as the worst possible life.")
     } else if(variableNum == 1){
@@ -625,15 +611,24 @@ function whatIsThisVariable(variableNum){
         $("#variableExplanation").html("It represents whether or not a person has someone to count on in times of trouble. The response was binary(0: no one to count on, 1: someone to count on)")
     }
 }
-function dropMap(){
+//write another function for when mouse is out
+function menuHoverEnd(variableNum){
+    var num = categories[variableNum];
+    logEvent.log(num, null, null,5, 13);
+}
+function menuMouseAction(){
 
+}
+function dropMap(){
         getColorValue.getRawValues(combinedData, currentVar[0]);
         getColorValue.recolorMap();
+        logEvent.log(currentVar[0], null, currentYear,5, 8);
 }
 function changeVarMap(variable){
     currentVar[0] = variable;
     getColorValue.getRawValues(combinedData, currentVar[0]);
     getColorValue.recolorMap();
+    logEvent.log(variable, null, currentYear,5, 0);
 }
 
 //this function finds max and min value for each variable
@@ -684,10 +679,8 @@ function getBarChartScale(Data, singleYearData){
 
     drawBar.getDataBar(singleYearData, _max, _min);
     drawBar.drawBar(combinedData);
-//    drawBar(singleYearData, _max, _min, categories[0], categories[1], categories[2], categories[3], categories[4], categories[5], categories[6]);
     barMax = _max;
     barMin = _min;
-
 }
 //function showLabel(){
 //    $(".timeChartLabel").css("display", "block");
@@ -695,7 +688,6 @@ function getBarChartScale(Data, singleYearData){
 //function hideLabel(){
 //    $(".timeChartLabel").css("display", "none");
 //}
-
 
 function getCurrentVar(){
     if(currentScatterVar.length > 0){
@@ -717,15 +709,17 @@ function scatterSliderInit(){
     sliderY.defaultValue = 1;
 
 //the numeric value currently selected in the slider
-
 }
 //runs when the slider is moved --> change variable displayed on a scatterplot
 function scatterChange(){
+
     var sliderX = document.getElementById("sliderScatterX");
     var sliderY = document.getElementById("sliderScatterY");
 
     var variableX = parseInt(sliderX.value);
     var variableY = parseInt(sliderY.value);
+
+    var variables = [];
 
     currentScatterVar[0] = categories[variableX];
     currentScatterVar[1] = categories[variableY];
@@ -733,28 +727,18 @@ function scatterChange(){
     currentScatterX = categories[variableX];
     currentScatterY = categories[variableY];
 
+    variables.push(currentScatterX);
+    variables.push(currentScatterY);
+
     drawScatter(singleYearData, categories[variableX], categories[variableY]);
-}
-//for hiding and showing label for time chart when mouse cursor is on the time chart svg
-function hideLabel(num){
-////var svgNum = "Time" + num;
-//var lblNum = "timeLabel" + num;
-//
-//$("#"+lblNum).css("display", "none");
-}
-function showLabel(num){
-//    var lblNum = "timeLabel" + num;
-//
-//    $("#"+lblNum).css("display", "block");
+    logEvent.log(variables, null, currentYear,6, 11);
 }
 
 scatterSliderInit();
 drawMap.fetchCSV(categories[0], currentYear);
 
 </script>
-
 <script src="lib/jquery-3.1.1.min.js"></script>
-
 
 </body>
 </html>

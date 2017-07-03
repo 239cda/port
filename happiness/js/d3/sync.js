@@ -293,93 +293,104 @@ function changeColorSort(codeBar){
             .attr("stroke-width", strokeWidth);
     }
 }
-function brushHighlight(){
+function brushHighlight(varXY, allCountries){
     var _code = [];
     var _ID = [];
+    var brushed = allCountries.slice(0, allCountries.length + 1);
+
+    // d3.select("#SVGScatter").selectAll(".hidden")
+    //     .attr("fill", function(d)
+    //     {
+    //         _code.push(d["code"]);
+    //         _ID.push(d["Country Code"]);
+    //
+    //     });
+
     d3.select("#SVGScatter").selectAll(".hidden")
         .attr("fill", function(d)
         {
-            _code.push(d["code"]);
-            _ID.push(d["Country Code"]);
+            var index = brushed.indexOf(d["Country Code"]);
+          if(index >= 0){
+              brushed.splice(index, 1);
+          }
         });
+    logEvent.log(varXY, brushed, currentYear, 2, 2);
 
     d3.select("#SVG1").selectAll(".bar1")
         .attr("fill", function(d){
-
-            var index = _ID.indexOf(d.countryCode);
+            var index = brushed.indexOf(d.countryCode);
             if (index < 0) {
-                return highlightCol;
+                return "grey"
             }
             else{
-                return "grey"
+                return highlightCol;
             }
         })
-
     d3.select("#SVG2").selectAll(".bar2")
         .attr("fill", function(d, i){
-            var index = _ID.indexOf(d.countryCode);
+            var index = brushed.indexOf(d.countryCode);
             if (index < 0) {
-                return highlightCol;
+                return "grey"
             }
             else{
-                return "grey"
+                return highlightCol;
             }
         })
 
     d3.select("#SVG3").selectAll(".bar3")
         .attr("fill", function(d, i){
-            var index = _ID.indexOf(d.countryCode);
+            var index = brushed.indexOf(d.countryCode);
             if (index < 0) {
-                return highlightCol;
+                return "grey"
             }
             else{
-                return "grey"
+                return highlightCol;
             }
         })
     d3.select("#SVG4").selectAll(".bar4")
         .attr("fill", function(d, i){
-            var index = _ID.indexOf(d.countryCode);
+            var index = brushed.indexOf(d.countryCode);
             if (index < 0) {
-                return highlightCol;
+                return "grey"
             }
             else{
-                return "grey"
+                return highlightCol;
             }
         })
     d3.select("#SVG5").selectAll(".bar5")
         .attr("fill", function(d, i){
-            var index = _ID.indexOf(d.countryCode);
+            var index = brushed.indexOf(d.countryCode);
             if (index < 0) {
-                return highlightCol;
+                return "grey"
             }
             else{
-                return "grey"
+                return highlightCol;
             }
         })
     d3.select("#SVG6").selectAll(".bar6")
         .attr("fill", function(d, i){
-            var index = _ID.indexOf(d.countryCode);
+            var index = brushed.indexOf(d.countryCode);
             if (index < 0) {
-                return highlightCol;
+                return "grey";
             }
             else{
-                return "grey"
+                return highlightCol;
             }
         })
     d3.select("#SVG7").selectAll(".bar7")
         .attr("fill", function(d, i){
-            var index = _ID.indexOf(d.countryCode);
+            var index = brushed.indexOf(d.countryCode);
             if (index < 0) {
-                return highlightCol;
+                return "grey";
             }
             else{
-                return "grey"
+                return highlightCol;
             }
-        })
+        });
 
     d3.select("#map").selectAll(".unit").style("fill",function(d, i){
-        var index = _ID.indexOf(d.id);
-        if (index >= 0) {
+        var index = brushed.indexOf(d.id);
+        if (index < 0) {
             //the problem is, the countries with null values are also being selected because they are also NOT IN the _ID.
             var codeIndex = codeStorage.indexOf(d.id);
             if (codeIndex >= 0) {
@@ -388,6 +399,7 @@ function brushHighlight(){
                 return returnColor(_colorCode);
             }
         }
+
         else {
             var codeIndex = codeStorage.indexOf(d.id);
             if (codeIndex >= 0) {

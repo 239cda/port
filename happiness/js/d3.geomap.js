@@ -158,17 +158,15 @@ var Geomap = (function () {
                 function zooming() {
                     if(event.deltaY > 0){
                         self.svg.selectAll('g.zoom').transition().duration(750).attr('transform', 'scale(1)');
+                        logEvent.log(currentVar[0], null, currentYear, 1, 5);
                     }
                     else if(event.deltaY < 0){
                         self.svg.selectAll('g.zoom').transition().duration(750).attr('transform', 'translate(' + x0 + ', ' + y0 + ')scale(' + kZoom + ')translate(-' + mouseX  + ', -' + mouseY + ')');
-                        // self.svg.selectAll('g.zoom').transition().duration(750).attr('transform', 'scale(' + kZoom + ')translate(-' + mouseX + ', -' + mouseY + ')');
+                        logEvent.log(currentVar[0], null, currentYear, 1, 4);
                     }
                     pastX = mouseX;
                     pastY = mouseY;
                 }
-
-
-
 
                 self.svg.append('g').attr('class', 'units zoom').selectAll('path')
                     .data(topojson.feature(geo, geo.objects[self.properties.units]).features).enter()
@@ -187,7 +185,6 @@ var Geomap = (function () {
 
                     mouseX = mouse[0];
                     mouseY = mouse[1];
-
 
                     //Update the tooltip position and value
                     d3.select("#tooltipMap")
@@ -228,10 +225,8 @@ var Geomap = (function () {
                                 }
                             };
                         })
-                        // hoverCountry(currentCountry);
                     };
-
-
+                    logEvent.log(currentVar[0], d.id, currentYear, 1, 12);
                 })
                     .attr("d", self.path).on("mouseout", function(d)
                 {
@@ -254,7 +249,7 @@ var Geomap = (function () {
                             }
                         }
                     })
-
+                    logEvent.log(currentVar[0], d.id, currentYear, 1, 13);
                 })
                     .attr('d', self.path).on('click', function(d){
 
@@ -271,11 +266,11 @@ var Geomap = (function () {
                         changeColor(currentCountry);
 
                         isCountrySelected = true;
+                        logEvent.log(currentVar[0], d.id, currentYear, 1, 14);
                     }
 
                     else if(isCountrySelected == true){
                         var formerColored = currentCountry;
-                        console.log(d.id, currentCountry)
                         if (d.id == currentCountry) {
                         d3.selectAll(".unit").style("fill", function (d) {
 
@@ -286,6 +281,7 @@ var Geomap = (function () {
                                     return returnColor(_colorCode);
                                 }
                         })
+                            logEvent.log(currentVar[0], d.id, currentYear, 1, 15);
                         }
                         //if a user selects a different country, the coloring changes immediately to reflect change
 
@@ -297,13 +293,11 @@ var Geomap = (function () {
                             changeColor(currentCountry);
 
                             isCountrySelected = true;
+                            logEvent.log(currentVar[0], d.id, currentYear, 1, 14);
                         }
                     };
-                    //isCountrySelected becomes false only when a user selects same country twice
-                })
-                    // .call(zoom)
-                //choropleth!
 
+                })
                 self.svg.selectAll("path.unit")
                     .style("fill", function(d){
                         var codeIndex = codeStorage.indexOf(d.id);
@@ -729,7 +723,7 @@ function titleDisplay (mapTitle) {
     else if(mapTitle == "Life Ladder") {mapTitle = "Happiness Score";}
 
 
-d3.select("#map").selectAll("text").remove()
+d3.select("#map").selectAll("text").remove();
 
     d3.select(".mapSVG")
         .append("text")

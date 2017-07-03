@@ -22,6 +22,9 @@ var strokeWidth = 4;
 
 //a listenr for each sort icon. when same icon is clicekd twice, it will run resetSort to change arrangement of charts
 var resetSort = 0;
+//array containing all the country codes for countries with valid data this year
+//for use in brushing to compare with hidden circles' codes
+var allCountries = [];
 
 //scatterplots
 function drawScatter(data, variable, variable2){
@@ -30,6 +33,9 @@ function drawScatter(data, variable, variable2){
 
     scatterX = variable;
     scatterY = variable2;
+    var variables = [];
+    variables.push(scatterX);
+    variables.push(scatterY);
 
     var _maxY,_maxX,_minY,_minX;
     var _scatterH = 260;
@@ -73,7 +79,7 @@ function drawScatter(data, variable, variable2){
         .attr("id","xAxisScatter")
         .attr("class", "axis refresh");
 
-    callBrush(minMax);
+    callBrush(minMax, variables);
 
     d3.select("#SVGScatter")
         .selectAll("circle")
@@ -88,7 +94,6 @@ function drawScatter(data, variable, variable2){
                     return xScale(d[variable]);
                 }
             else{
-                // d["Country Code"]= "XXX";
                 return 500;
             }
         })
@@ -106,6 +111,9 @@ function drawScatter(data, variable, variable2){
         })
         .attr("fill", "grey")
         .attr("r", 5)
+        .attr("id", function(d){
+            return d.id;
+        })
         .on("mouseover", function(d){
             // if(isCountrySelected == true), let the circles be colored and charts contents changed
             //while keeping the highlight in the single country
@@ -149,8 +157,11 @@ function drawScatter(data, variable, variable2){
                 d3.select("#tooltipScatter").classed("hidden", false);
                 d3.select(this).attr("fill", highlightCol);
 
+                var variables = [];
+                variables.push(scatterX);
+                variables.push(scatterY);
                 //for logging, send current country code to log.js
-            logEvent.scatter(d["Country Code"], scatterX, scatterY);
+            logEvent.log(variables, d["Country Code"], d["year"], 2, 12);
         })
         .on("mouseout", function(d){
             d3.select("#tooltipScatter").classed("hidden", true);
@@ -176,7 +187,6 @@ function drawScatter(data, variable, variable2){
                     d3.select("#SVGScatter").selectAll("circle")
                         .attr("fill", function (d) {
                             if (selected == d["Country Code"]) {
-                                console.log(d["Country Code"], selected)
                                 return highlightCol
                             }
                             else {
@@ -188,6 +198,10 @@ function drawScatter(data, variable, variable2){
                     // d3.select(this).attr("stroke", "none");
                 }
             }
+            var variables = [];
+            variables.push(scatterX);
+            variables.push(scatterY);
+            logEvent.log(variables, d["Country Code"], d["year"], 2, 13);
         })
         .on("click", function(d){
             if(isCountrySelected == false) {
@@ -233,7 +247,7 @@ function drawScatter(data, variable, variable2){
                     isCountrySelected = true;
                 }
                 //for logging
-                logEvent.scatter(d["Country Code"], scatterX, scatterY);
+            logEvent.log(scatterX, scatterY, d["Country Code"], d["year"], 2, 0);
         })
         .attr("transform", "translate(" + _padding + ", -15)")
         .attr("class", "refresh");
@@ -268,6 +282,11 @@ function drawScatter(data, variable, variable2){
         .attr("dx", "-15em")
         .attr("dy", "-0.8em")
         .attr("transform", "rotate(-90)")
+
+    d3.select("#SVGScatter").selectAll("circle")
+        .attr("stroke-width", function(d){
+            allCountries.push(d["Country Code"]);
+        })
 }
 //bar graph min/max val
 var findMax = function(data, criteria){
@@ -515,7 +534,7 @@ var drawBar = (function (){
                      }
                      ;
                  })
-
+             logEvent.log(5, null, currentYear, 0, 9);
          }
          else {
              d3.select(mainBar).selectAll(mainBarClass)
@@ -537,10 +556,13 @@ var drawBar = (function (){
                      else{return _svgH;}
                  })
                  .attr("height", function (d) {
+
                      if (dyScale(Number(d[variable])) > 0) {
                          return dyScale(Number(d[variable]));
                      }
                  });
+             logEvent.log(mainBarNum, null, currentYear, 0, 9);
+
          }
          //announcement for all bars below
             //use "var" + mainBarNum and find out if that property returns 0
@@ -777,6 +799,7 @@ var drawBar = (function (){
 
 //when this runs, this will display the bars in alphabetical order
         else if(resetSort == 1){
+
 
             sortItems2 = function (a, b) {
                 return d3.ascending(a.name, b.name);
@@ -1069,7 +1092,9 @@ var drawBar = (function (){
         reset1 = reset1 + 1;
         if (reset1 > 1) {
             reset1 = 0;
+            logEvent.log(1, null,currentYear, 0, 10);
         };
+
     }
     function sort2Click() {
         isSortUsed = true;
@@ -1077,6 +1102,7 @@ var drawBar = (function (){
         reset2 = reset2 + 1;
         if (reset2 > 1) {
             reset2 = 0;
+            logEvent.log(2, null,currentYear, 0, 10);
         };
     }
     function sort3Click() {
@@ -1085,6 +1111,7 @@ var drawBar = (function (){
         reset3 = reset3 + 1;
         if (reset3 > 1) {
             reset3 = 0;
+            logEvent.log(3, null,currentYear, 0, 10);
         };
     }
     function sort4Click() {
@@ -1093,6 +1120,7 @@ var drawBar = (function (){
         reset4 = reset4 + 1;
         if (reset4 > 1) {
             reset4 = 0;
+            logEvent.log(4, null,currentYear, 0, 10);
         };
     }
     function sort5Click() {
@@ -1101,6 +1129,7 @@ var drawBar = (function (){
         reset5 = reset5 + 1;
         if (reset5 > 1) {
             reset5 = 0;
+            logEvent.log(5,null,currentYear, 0, 10);
         };
     }
     function sort6Click() {
@@ -1109,6 +1138,7 @@ var drawBar = (function (){
         reset6 = reset6 + 1;
         if (reset6 > 1) {
             reset6 = 0;
+            logEvent.log(6, null,currentYear, 0, 10);
         };
     }
     function sort7Click() {
@@ -1117,6 +1147,7 @@ var drawBar = (function (){
         reset7 = reset7 + 1;
         if (reset7 > 1) {
             reset7 = 0;
+            logEvent.log(7, null,currentYear, 0, 10);
         };
     }
 
@@ -1214,6 +1245,8 @@ var drawBar = (function (){
         d3.select("#SVG1").selectAll(".bar1")
         //using 160+ country names;
             .on("mouseover", function (d) {
+
+                logEvent.log(1, d["countryCode"], d["year"], 0, 12);
                 //if no country currently selected == color + other charts highligths should change on hover
                 if (isCountrySelected == false) {
                     if (brushOn == false) {
@@ -1268,6 +1301,7 @@ var drawBar = (function (){
 
             })
             .on("mouseout", function (d) {
+                logEvent.log(1, d["countryCode"], d["year"], 0, 13);
                 d3.select("#tooltip").classed("hidden", true);
                 if (isCountrySelected == false) {
                     if (brushOn == false) {
@@ -1329,6 +1363,7 @@ var drawBar = (function (){
 
                         isCountrySelected = true;
                     }
+                    logEvent.log(1, d["countryCode"], d["year"], 0, 0);
                 }
             })
             .attr("transform", "translate(20, 0)");
@@ -1411,6 +1446,7 @@ var drawBar = (function (){
         d3.select("#SVG2").selectAll(".bar2")
         //using 160+ country names;
             .on("mouseover", function (d) {
+                logEvent.log(2, d["countryCode"], d["year"], 0, 12);
                 if (isCountrySelected == false) {
                     if (brushOn == false) {
                         var forIndex = d.countryCode;
@@ -1480,6 +1516,7 @@ var drawBar = (function (){
                             })
                     }
                 }
+                logEvent.log(2, d["countryCode"], d["year"], 0, 13);
             })
             .on("click", function (d) {
                 if (isCountrySelected == false) {
@@ -1518,6 +1555,7 @@ var drawBar = (function (){
                         isCountrySelected = true;
                     }
                 }
+                logEvent.log(2, d["countryCode"], d["year"], 0, 0);
             })
             .attr("transform", "translate(20, 0)");
 
@@ -1601,6 +1639,7 @@ var drawBar = (function (){
         d3.select("#SVG3").selectAll(".bar3")
         //using 160+ country names;
             .on("mouseover", function (d) {
+                logEvent.log(3, d["countryCode"], d["year"], 0, 12);
                 if (isCountrySelected == false) {
                     if (brushOn == false) {
                         var forIndex = d.countryCode;
@@ -1670,6 +1709,7 @@ var drawBar = (function (){
                             })
                     }
                 }
+                logEvent.log(3, d["countryCode"], d["year"], 0, 13);
             })
             .on("click", function (d) {
                 if (isCountrySelected == false) {
@@ -1708,6 +1748,7 @@ var drawBar = (function (){
                         isCountrySelected = true;
                     }
                 }
+                logEvent.log(3, d["countryCode"], d["year"], 0, 0);
             })
             .attr("transform", "translate(20, 0)");
 
@@ -1771,6 +1812,8 @@ var drawBar = (function (){
             })
             .attr("fill", "grey")
             .on("mouseover", function (d) {
+                logEvent.log(4, d["countryCode"], d["year"], 0, 12);
+
                 if (isCountrySelected == false) {
                     if (brushOn == false) {
                         var forIndex = d.countryCode;
@@ -1831,6 +1874,7 @@ var drawBar = (function (){
                             ;
                         })
                 }
+                logEvent.log(4, d["countryCode"], d["year"], 0, 13);
             })
             .on("click", function (d) {
                 if (isCountrySelected == false) {
@@ -1869,6 +1913,7 @@ var drawBar = (function (){
                         isCountrySelected = true;
                     }
                 }
+                logEvent.log(4, d["countryCode"], d["year"], 0, 0);
             })
             .attr("transform", "translate(20, 0)");
 
@@ -1942,6 +1987,7 @@ var drawBar = (function (){
             })
             .attr("fill", "grey")
             .on("mouseover", function (d) {
+                logEvent.log(5, d["countryCode"], d["year"], 0, 12);
                 if (isCountrySelected == false) {
                     if (brushOn == false) {
                         var forIndex = d.countryCode;
@@ -2009,6 +2055,7 @@ var drawBar = (function (){
                             })
                     }
                 }
+                logEvent.log(4, d["countryCode"], d["year"], 0, 13);
             })
             .on("click", function (d) {
                 if (isCountrySelected == false) {
@@ -2047,6 +2094,7 @@ var drawBar = (function (){
                         isCountrySelected = true;
                     }
                 }
+                logEvent.log(5, d["countryCode"], d["year"], 0, 0);
             })
             .attr("transform", "translate(20, 0)");
 
@@ -2105,6 +2153,7 @@ var drawBar = (function (){
             })
             .attr("fill", "grey")
             .on("mouseover", function (d) {
+                logEvent.log(6, d["countryCode"], d["year"], 0, 12);
                 if (isCountrySelected == false) {
                     if (brushOn == false) {
                         var forIndex = d.countryCode;
@@ -2172,6 +2221,7 @@ var drawBar = (function (){
                             })
                     }
                 }
+                logEvent.log(6, d["countryCode"], d["year"], 0, 13);
             })
             .on("click", function (d) {
                 if (isCountrySelected == false) {
@@ -2210,6 +2260,7 @@ var drawBar = (function (){
                         isCountrySelected = true;
                     }
                 }
+                logEvent.log(6, d["countryCode"], d["year"], 0, 0);
             })
             .attr("transform", "translate(20, 0)");
 
@@ -2268,6 +2319,7 @@ var drawBar = (function (){
             })
             .attr("fill", "grey")
             .on("mouseover", function (d) {
+                logEvent.log(7, d["countryCode"], d["year"], 0, 12);
                 if (isCountrySelected == false) {
                     if (brushOn == false) {
                         // var _code = parseInt(this.id);
@@ -2337,6 +2389,7 @@ var drawBar = (function (){
                             })
                     }
                 }
+                logEvent.log(7, d["countryCode"], d["year"], 0, 13);
             })
             .on("click", function (d) {
                 if (isCountrySelected == false) {
@@ -2375,6 +2428,7 @@ var drawBar = (function (){
                         isCountrySelected = true;
                     }
                 }
+                logEvent.log(7, d["countryCode"], d["year"], 0, 0);
             })
             .attr("transform", "translate(20, 0)");
 

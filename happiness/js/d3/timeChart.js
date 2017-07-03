@@ -199,6 +199,7 @@ var timeChart = (function timeChart(){
                 .orient("left")
                 .ticks(5);
 
+
         var line1 = d3.svg.line()
             .x(function(d, i) {
                 var year = [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015];
@@ -209,7 +210,6 @@ var timeChart = (function timeChart(){
 
             })
             .y(function(d, i) {
-
                 //지금 있는 건 전체 year, 지금 나라의 valid year, 하나씩 valid year 속에서 증가.
 
                 var year = [2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015];
@@ -440,11 +440,20 @@ var timeChart = (function timeChart(){
                 } else if(value == null) {return _svgH;}
             });
 
-            d3.select("#Time1").append("path")
+var area_time1 = d3.select("#Time1").append("g");
+var area_time2 = d3.select("#Time2").append("g");
+var area_time3 = d3.select("#Time3").append("g");
+var area_time4 = d3.select("#Time4").append("g");
+var area_time5 = d3.select("#Time5").append("g");
+var area_time6 = d3.select("#Time6").append("g");
+var area_time7 = d3.select("#Time7").append("g");
+
+
+            area_time1.append("path")
                 .attr("class", "line")
                 .attr("d", line1(_currentCountryData));
 
-            d3.select("#Time1").append("path")
+            area_time1.append("path")
                 .datum(_currentCountryData)
                 .attr("class", "area")
                 .attr("d", area1);
@@ -461,7 +470,7 @@ var timeChart = (function timeChart(){
 
 
             // add a dot displaying exact numeric value
-            d3.select("#Time1").selectAll("circle")
+            area_time1.selectAll("circle")
                 .data(_currentCountryData)
                 .enter()
                 .append("circle")
@@ -481,6 +490,8 @@ var timeChart = (function timeChart(){
                 .attr("fill", "grey")
                 .attr("r", 3)
                 .on("mouseover", function(d){
+                    logEvent.log(1, d["countryCode"], d["year"], 3, 12);
+
                     var tooltipVal = d["var1"];
 
                     d3.select(this).attr("fill", highlightCol);
@@ -511,14 +522,15 @@ var timeChart = (function timeChart(){
                     d3.select(this).attr("r", 3);
                     // d3.select("#tooltipTime").classed("hidden", true);
                     $("#tooltipTime").css("display", "none");
+                    logEvent.log(1, d["countryCode"], d["year"], 3, 13);
                 });
 
-        d3.select("#Time2").append("path")
+        area_time2.append("path")
             .datum(_currentCountryData)
             .attr("class", "line")
             .attr("d", line2)
 
-        d3.select("#Time2").append("path")
+            area_time2.append("path")
             .datum(_currentCountryData)
             .attr("class", "area")
             .attr("d", area2);
@@ -533,7 +545,7 @@ var timeChart = (function timeChart(){
                 .call(xAxisNoTick)
                 .attr("transform", "translate(0,54)");
 
-            d3.select("#Time2").selectAll("circle")
+            area_time2.selectAll("circle")
                 .data(_currentCountryData)
                 .enter()
                 .append("circle")
@@ -554,6 +566,7 @@ var timeChart = (function timeChart(){
                 .attr("fill", "grey")
                 .attr("r", 3)
                 .on("mouseover", function(d){
+                    logEvent.log(2, d["countryCode"], d["year"], 3, 12);
                     var tooltipVal = d["var2"];
                     d3.select(this).attr("fill", highlightCol);
                     d3.select(this).attr("r", 5);
@@ -563,7 +576,7 @@ var timeChart = (function timeChart(){
 
                     d3.select("#tooltipTime")
                         .style("left", xPosition + "px")
-                        .style("top", yPosition + 40 + "px")
+                        .style("top", yPosition + 30 + "px")
                         .select("#valueTime")
                         .text(function(d){
                             if(tooltipVal != null) {
@@ -586,15 +599,16 @@ var timeChart = (function timeChart(){
                     d3.select(this).attr("r", 3);
                     // d3.select("#tooltipTime").classed("hidden", true);
                     $("#tooltipTime").css("display", "none");
+                    logEvent.log(2, d["countryCode"], d["year"], 3, 13);
                 });
 
 
-        d3.select("#Time3").append("path")
+        area_time3.append("path")
             .datum(_currentCountryData)
             .attr("class", "line")
             .attr("d", line3);
 
-        d3.select("#Time3").append("path")
+            area_time3.append("path")
             .datum(_currentCountryData)
             .attr("class", "area")
             .attr("d", area3);
@@ -609,7 +623,7 @@ var timeChart = (function timeChart(){
                 .call(xAxisNoTick)
                 .attr("transform", "translate(0,54)");
 
-            d3.select("#Time3").selectAll("circle")
+            area_time3.selectAll("circle")
                 .data(_currentCountryData)
                 .enter()
                 .append("circle")
@@ -629,6 +643,7 @@ var timeChart = (function timeChart(){
                 .attr("fill", "grey")
                 .attr("r", 3)
                 .on("mouseover", function(d){
+                    logEvent.log(3, d["countryCode"], d["year"], 3, 12);
                     var tooltipVal = d["var3"];
                     d3.select(this).attr("fill", highlightCol);
                     d3.select(this).attr("r", 5);
@@ -658,14 +673,15 @@ var timeChart = (function timeChart(){
                     d3.select(this).attr("r", 3);
                     // d3.select("#tooltipTime").classed("hidden", true);
                     $("#tooltipTime").css("display", "none");
+                    logEvent.log(3, d["countryCode"], d["year"], 3, 13);
                 });
 
-        d3.select("#Time4").append("path")
+            area_time4.append("path")
             .datum(_currentCountryData)
             .attr("class", "line")
             .attr("d", line4);
 
-        d3.select("#Time4").append("path")
+            area_time4.append("path")
             .datum(_currentCountryData)
             .attr("class", "area")
             .attr("d", area4);
@@ -680,7 +696,7 @@ var timeChart = (function timeChart(){
                 .call(xAxisNoTick)
                 .attr("transform", "translate(0,54)");
 
-            d3.select("#Time4").selectAll("circle")
+            area_time4.selectAll("circle")
                 .data(_currentCountryData)
                 .enter()
                 .append("circle")
@@ -700,6 +716,7 @@ var timeChart = (function timeChart(){
                 .attr("fill", "grey")
                 .attr("r", 3)
                 .on("mouseover", function(d){
+                    logEvent.log(4, d["countryCode"], d["year"], 3, 12);
                     var tooltipVal = d["var4"];
                     d3.select(this).attr("fill", highlightCol);
                     d3.select(this).attr("r", 5);
@@ -729,17 +746,18 @@ var timeChart = (function timeChart(){
                     d3.select(this).attr("r", 3);
                     // d3.select("#tooltipTime").classed("hidden", true);
                     $("#tooltipTime").css("display", "none");
+                    logEvent.log(4, d["countryCode"], d["year"], 3, 13);
                 });
 
 
-        d3.select("#Time5").append("path")
+            area_time5.append("path")
             .datum(_currentCountryData)
             .attr("class", "line")
             .attr("d", line5)
 
 
 
-        d3.select("#Time5").append("path")
+            area_time5.append("path")
             .datum(_currentCountryData)
             .attr("class", "area")
             .attr("d", area5);
@@ -754,7 +772,7 @@ var timeChart = (function timeChart(){
                 .call(xAxisNoTick)
                 .attr("transform", "translate(0,54)");
 
-         d3.select("#Time5").selectAll("circle")
+            area_time5.selectAll("circle")
                 .data(_currentCountryData)
                 .enter()
                 .append("circle")
@@ -774,6 +792,7 @@ var timeChart = (function timeChart(){
                 .attr("fill", "grey")
                 .attr("r", 3)
                 .on("mouseover", function(d){
+                    logEvent.log(5, d["countryCode"], d["year"], 3, 12);
                     var tooltipVal = d["var5"];
 
                     d3.select(this).attr("fill", highlightCol);
@@ -804,14 +823,15 @@ var timeChart = (function timeChart(){
                     d3.select(this).attr("r", 3);
                     // d3.select("#tooltipTime").classed("hidden", true);
                     $("#tooltipTime").css("display", "none");
+                    logEvent.log(5, d["countryCode"], d["year"], 3, 13);
                 });
 
-        d3.select("#Time6").append("path")
+            area_time6.append("path")
             .datum(_currentCountryData)
             .attr("class", "line")
             .attr("d", line6)
 
-            d3.select("#Time6").append("path")
+            area_time6.append("path")
                 .datum(_currentCountryData)
                 .attr("class", "area")
                 .attr("d", area6);
@@ -828,7 +848,7 @@ var timeChart = (function timeChart(){
 
 
 
-            d3.select("#Time6").selectAll("circle")
+            area_time6.selectAll("circle")
                 .data(_currentCountryData)
                 .enter()
                 .append("circle")
@@ -848,6 +868,7 @@ var timeChart = (function timeChart(){
                 .attr("fill", "grey")
                 .attr("r", 3)
                 .on("mouseover", function(d){
+                    logEvent.log(6, d["countryCode"], d["year"], 3, 12);
                     var tooltipVal = d["var6"];
                     d3.select(this).attr("fill", highlightCol);
                     d3.select(this).attr("r", 5);
@@ -877,14 +898,15 @@ var timeChart = (function timeChart(){
                     d3.select(this).attr("r", 3);
                     // d3.select("#tooltipTime").classed("hidden", true);
                     $("#tooltipTime").css("display", "none");
+                    logEvent.log(6, d["countryCode"], d["year"], 3, 13);
                 });
 
-        d3.select("#Time7").append("path")
+            area_time7.append("path")
             .datum(_currentCountryData)
             .attr("class", "line")
             .attr("d", line7);
 
-        d3.select("#Time7").append("path")
+            area_time7.append("path")
             .datum(_currentCountryData)
             .attr("class", "area")
             .attr("d", area7);
@@ -899,7 +921,7 @@ var timeChart = (function timeChart(){
                 .call(xAxisNoTick)
                 .attr("transform", "translate(0,54)");
 
-            d3.select("#Time7").selectAll("circle")
+            area_time7.selectAll("circle")
                 .data(_currentCountryData)
                 .enter()
                 .append("circle")
@@ -920,6 +942,7 @@ var timeChart = (function timeChart(){
                 .attr("fill", "grey")
                 .attr("r", 3)
                 .on("mouseover", function(d){
+                    logEvent.log(7, d["countryCode"], d["year"], 3, 12);
                     var tooltipVal = d["var7"];
 
                     d3.select(this).attr("fill", highlightCol);
@@ -930,7 +953,7 @@ var timeChart = (function timeChart(){
 
                     d3.select("#tooltipTime")
                         .style("left", xPosition + "px")
-                        .style("top", yPosition + 370 + "px")
+                        .style("top", yPosition + 350 + "px")
                         .select("#valueTime")
                         .text(function(d){
                             if(tooltipVal != null) {
@@ -949,6 +972,7 @@ var timeChart = (function timeChart(){
                     d3.select(this).attr("r", 3);
                     // d3.select("#tooltipTime").classed("hidden", true);
                     $("#tooltipTime").css("display", "none");
+                    logEvent.log(7, d["countryCode"], d["year"], 3, 13);
                 });
 
     //x axis at bottom for ticks for year
