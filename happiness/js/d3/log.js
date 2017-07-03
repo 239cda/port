@@ -45,7 +45,7 @@ var logEvent = (function(){
             TimeStamp:[_hour + ":" + _minutes + ":" + _seconds]
     }
         userData.push(log);
-        console.log(log);
+        
     }
     function _viewLog(){
         console.log(userData);
