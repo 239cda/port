@@ -32,11 +32,17 @@ function callBrush(minMax, variables) {
         .call(brush);
 
     function brushstart(){
-        ids = [];
         d3.select("#SVGScatter").call(brush.clear());
-        d3.select("#SVGScatter")
-            .selectAll("circle")
-            .attr("fill", "grey");
+        d3.select("#SVGScatter").selectAll("circle")
+            .attr("fill", "grey")
+            .attr("stroke", function(d){
+                if(d["Country Code"] == currentCountry) {return strokeCol}
+                else{return "none"};
+             })
+            .attr("stroke-width", function(d){
+                if(d["Country Code"] == currentCountry) {return strokeWidth}
+                else{return 0};
+            });
         logEvent.log(varXY, null, currentYear, 2, 1);
 }
 
@@ -54,18 +60,28 @@ function callBrush(minMax, variables) {
             })
             .attr("fill", highlightCol);
 
+        d3.select("#SVGScatter").selectAll("circle")
+            .attr("stroke", function(d){
+            if(d["Country Code"] == currentCountry) {return strokeCol}
+            else{return "none"};
+        })
+            .attr("stroke-width", function(d){
+                if(d["Country Code"] == currentCountry) {return strokeWidth}
+                else{return 0};
+            });
+
         brushHighlight(varXY, allCountries);
     }
 
 // If the brush is empty, select all circles.
     function brushend() {
-
         logEvent.log(varXY, null, currentYear, 2, 3);
         if (brush.empty()) {
             brushOn = false;
             d3.select("#SVGScatter").selectAll(".hidden").classed("hidden", false)
                 .attr("fill", "grey");
         }
+
     }
 
 };

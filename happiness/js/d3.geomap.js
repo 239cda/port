@@ -205,26 +205,65 @@ var Geomap = (function () {
                     }
                     else if(isCountrySelected == true) {
                         countryID = d.id;
-                        var thisCountry = countryID;
 
-                        d3.selectAll(".unit").style("fill", function (d) {
-                            if (d.id == thisCountry) {
-                                var location = codeStorage.indexOf(d.id);
-                                var rawColorCode = Number(valuesInRange[location]);
-                                // legend.highlightLegend(rawColorCode);
-                                return highlightCol;
-                            }
-                            else if(d.id == currentCountry){
-                                return highlightCol;
+                        var thisCountry = countryID;
+                        if(brushOn == false) {
+                            d3.selectAll(".unit").style("fill", function (d) {
+                                if (d.id == thisCountry) {
+                                    var location = codeStorage.indexOf(d.id);
+                                    var rawColorCode = Number(valuesInRange[location]);
+                                    // legend.highlightLegend(rawColorCode);
+                                    return highlightCol;
+                                }
+                                else if (d.id == currentCountry) {
+                                    return highlightCol;
+                                }
+                                else {
+                                    var codeIndex = codeStorage.indexOf(d.id);
+                                    if (codeIndex >= 0) {
+                                        var _colorCode = valuesInRange[codeIndex];
+                                        return returnColor(_colorCode);
+                                    }
+                                }
+                                ;
+                            })
+                        }
+                        else if(brushOn == true) {
+                            if (isCountrySelected == true) {
+                                d3.selectAll(".unit").style("stroke", function (d) {
+                                    if (d.id == thisCountry || d.id == currentCountry) {
+                                        return strokeCol;
+                                    }
+                                })
                             }
                             else {
-                                var codeIndex = codeStorage.indexOf(d.id);
-                                if (codeIndex >= 0) {
-                                    var _colorCode = valuesInRange[codeIndex];
-                                    return returnColor(_colorCode);
-                                }
-                            };
-                        })
+                                hoverCountry(currentCountry);
+                                changeColor(currentCountry);
+                                d3.selectAll(".unit")
+                                    .style("fill", function (d) {
+                                        if (thisCountry == d.id) {
+                                            return highlightCol;
+                                        }
+                                        else if (brushed.indexOf(d.id) >= 0) {
+                                            return highlightCol;
+                                        }
+                                        else {
+                                            var codeIndex = codeStorage.indexOf(d.id);
+                                            if (codeIndex >= 0) {
+                                                var _colorCode = valuesInRange[codeIndex];
+                                                return returnColor(_colorCode);
+                                            }
+                                        }
+                                        ;
+                                    })
+
+                                d3.selectAll(".unit").style("stroke", function (d) {
+                                    if (d.id == thisCountry || d.id == currentCountry) {
+                                        return strokeCol;
+                                    }
+                                })
+                            }
+                        }
                     };
                     logEvent.log(currentVar[0], d.id, currentYear, 1, 12);
                 })
@@ -233,22 +272,46 @@ var Geomap = (function () {
                     d3.select("#tooltipMap").classed("hiddenMap", true);
                     countryID = d.id;
                     var thisCountry = countryID;
-
-                    d3.selectAll(".unit").style("fill", function (d) {
-                        if (d.id == currentCountry) {
-                            var location = codeStorage.indexOf(d.id);
-                            var rawColorCode = Number(valuesInRange[location]);
-                            // legend.highlightLegend(rawColorCode);
-                            return highlightCol;
+                    if(brushOn == false) {
+                        if (isCountrySelected == false) {
+                            refresh();
                         }
-                        else {
-                            var codeIndex = codeStorage.indexOf(d.id);
-                            if (codeIndex >= 0) {
-                                var _colorCode = valuesInRange[codeIndex];
-                                return returnColor(_colorCode);
+                        else if (isCountrySelected == true) {
+                            console.log(currentCountry)
+                            d3.selectAll(".unit").style("fill", function (d) {
+                                if (d.id == currentCountry) {
+                                    var location = codeStorage.indexOf(d.id);
+                                    var rawColorCode = Number(valuesInRange[location]);
+                                    // legend.highlightLegend(rawColorCode);
+                                    return highlightCol;
+                                }
+                                else {
+                                    var codeIndex = codeStorage.indexOf(d.id);
+                                    if (codeIndex >= 0) {
+                                        var _colorCode = valuesInRange[codeIndex];
+                                        return returnColor(_colorCode);
+                                    }
+                                }
+                            })
+                        }
+                    }
+                   else if(brushOn == true){
+                        d3.selectAll(".unit").style("stroke", function (d){
+                            if (d.id == currentCountry) {
+                                return strokeCol;
+                            }})
+                            .style("fill", function (d) {
+                            if (brushed.indexOf(d.id) >= 0) {
+                                return highlightCol;
                             }
-                        }
-                    })
+                            else {
+                                var codeIndex = codeStorage.indexOf(d.id);
+                                if (codeIndex >= 0) {
+                                    var _colorCode = valuesInRange[codeIndex];
+                                    return returnColor(_colorCode);
+                                }
+                            }})
+                    }
                     logEvent.log(currentVar[0], d.id, currentYear, 1, 13);
                 })
                     .attr('d', self.path).on('click', function(d){
@@ -281,6 +344,8 @@ var Geomap = (function () {
                                     return returnColor(_colorCode);
                                 }
                         })
+                            refresh();
+
                             logEvent.log(currentVar[0], d.id, currentYear, 1, 15);
                         }
                         //if a user selects a different country, the coloring changes immediately to reflect change
@@ -586,7 +651,7 @@ d3.select("#map").selectAll("path").style("stroke", "black").style("stroke-width
 
     if (brushOn == false) {
         d3.selectAll(".unit").style("fill", function (d, i) {
-            if (d.id == selectedCountry) {
+            if (d.id == selectedCountry || d.id == currentCountry) {
                 var location = codeStorage.indexOf(d.id);
                 var rawColorCode = Number(valuesInRange[location]);
                 legend.highlightLegend(rawColorCode);
@@ -701,7 +766,7 @@ d3.select("#map").selectAll("path").style("stroke", "black").style("stroke-width
             })
 
         d3.select("#map").selectAll("path").style("stroke", function (d, i) {
-            if (d.id == selectedCountry) {
+            if (d.id == selectedCountry || d.id == currentCountry) {
                 var location = codeStorage.indexOf(d.id);
                 var rawColorCode = Number(valuesInRange[location]);
                 legend.highlightLegend(rawColorCode);
@@ -709,7 +774,7 @@ d3.select("#map").selectAll("path").style("stroke", "black").style("stroke-width
             }
         })
             .style("stroke-width", function(d,i){
-                if (d.id == selectedCountry) {
+                if (d.id == selectedCountry || d.id == currentCountry) {
                     return strokeWidth};
             })
     }

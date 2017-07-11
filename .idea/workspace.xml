@@ -18,18 +18,28 @@
       <file leaf-file-name="worldmap.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/happiness/worldmap.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="163">
-              <caret line="731" column="0" lean-forward="true" selection-start-line="731" selection-start-column="0" selection-end-line="731" selection-end-column="0" />
+            <state relative-caret-position="131">
+              <caret line="734" column="23" lean-forward="false" selection-start-line="734" selection-start-column="23" selection-end-line="734" selection-end-column="23" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="brush.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/happiness/js/d3/app.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="137">
+              <caret line="118" column="10" lean-forward="true" selection-start-line="118" selection-start-column="10" selection-end-line="118" selection-end-column="10" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="brush.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/happiness/js/d3/brush.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-259">
-              <caret line="39" column="53" lean-forward="true" selection-start-line="39" selection-start-column="7" selection-end-line="39" selection-end-column="53" />
+            <state relative-caret-position="342">
+              <caret line="27" column="34" lean-forward="true" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -38,18 +48,8 @@
       <file leaf-file-name="sync.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/happiness/js/d3/sync.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="399" column="10" lean-forward="false" selection-start-line="399" selection-start-column="10" selection-end-line="399" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="log.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/happiness/js/d3/log.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="726">
-              <caret line="33" column="38" lean-forward="false" selection-start-line="33" selection-start-column="38" selection-end-line="33" selection-end-column="38" />
+            <state relative-caret-position="-2221">
+              <caret line="297" column="0" lean-forward="false" selection-start-line="297" selection-start-column="0" selection-end-line="297" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -59,27 +59,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>scatterch</find>
-      <find>append</find>
-      <find>data.change</find>
-      <find>changevar</find>
-      <find>scatter</find>
-      <find>getCurrentVar</find>
-      <find>combinedData</find>
-      <find>logeve</find>
-      <find>changevarmap</find>
-      <find>logevent</find>
-      <find>logevent.</find>
-      <find>drag(</find>
-      <find>removelines</find>
-      <find>moveDiv</find>
-      <find>getDivNum</find>
-      <find>dropMap</find>
-      <find>dropMap</find>
-      <find>currentvar</find>
-      <find>brushhigh</find>
-      <find>function brush</find>
-      <find>brushhighl</find>
       <find>brushhighlight</find>
       <find>hidden</find>
       <find>brush</find>
@@ -89,6 +68,27 @@
       <find>sort</find>
       <find>scatterChange</find>
       <find>drawsca</find>
+      <find>changeColor</find>
+      <find>alert</find>
+      <find>brushhigh</find>
+      <find>update</find>
+      <find>0, 0</find>
+      <find>svg2</find>
+      <find>yearchange</find>
+      <find>text</find>
+      <find>timechartl</find>
+      <find>bottm</find>
+      <find>healthy life</find>
+      <find>time8</find>
+      <find>timecha</find>
+      <find>xaxis</find>
+      <find>brushhi</find>
+      <find>valuesIn</find>
+      <find>hoverCountr</find>
+      <find>changecolorso</find>
+      <find>axis</find>
+      <find>healt</find>
+      <find>allcountries</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -97,13 +97,14 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/happiness/js/d3/log.js" />
+        <option value="$PROJECT_DIR$/happiness/css/layout.css" />
         <option value="$PROJECT_DIR$/happiness/js/d3/timeChart.js" />
         <option value="$PROJECT_DIR$/happiness/js/d3.geomap.js" />
-        <option value="$PROJECT_DIR$/happiness/js/d3/log.js" />
-        <option value="$PROJECT_DIR$/happiness/worldmap.html" />
-        <option value="$PROJECT_DIR$/happiness/js/d3/brush.js" />
-        <option value="$PROJECT_DIR$/happiness/js/d3/app.js" />
         <option value="$PROJECT_DIR$/happiness/js/d3/sync.js" />
+        <option value="$PROJECT_DIR$/happiness/js/d3/brush.js" />
+        <option value="$PROJECT_DIR$/happiness/worldmap.html" />
+        <option value="$PROJECT_DIR$/happiness/js/d3/app.js" />
       </list>
     </option>
   </component>
@@ -136,6 +137,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -202,9 +204,26 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="port" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="port" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="happiness" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -229,17 +248,19 @@
       <workItem from="1498749265505" duration="956000" />
       <workItem from="1498753689955" duration="402000" />
       <workItem from="1499042127606" duration="21547000" />
+      <workItem from="1499643518319" duration="18875000" />
+      <workItem from="1499753697901" duration="4017000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="41066000" />
+    <option name="totallyTimeSpent" value="63958000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1603631" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16490166" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32923076" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -257,6 +278,25 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32923076" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16263238" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="processedProjectFiles" value="true" />
@@ -269,40 +309,101 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/happiness/js/d3/app.js</url>
-          <line>203</line>
-          <properties />
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/happiness/js/d3/app.js</url>
-          <line>163</line>
-          <properties />
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/happiness/js/d3/app.js</url>
-          <line>801</line>
-          <properties />
+          <line>838</line>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/happiness/js/d3/app.js</url>
-          <line>536</line>
-          <properties />
+          <line>573</line>
           <option name="timeStamp" value="17" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/happiness/js/d3/app.js</url>
-          <line>558</line>
-          <properties />
+          <line>595</line>
           <option name="timeStamp" value="18" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/happiness/js/d3/app.js</url>
+          <line>1494</line>
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/happiness/js/d3/app.js</url>
+          <line>251</line>
+          <option name="timeStamp" value="28" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/happiness/js/d3.geomap.js</url>
+          <line>230</line>
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/happiness/js/d3/app.js</url>
+          <line>1360</line>
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="20" />
+      <option name="time" value="32" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/happiness/worldmap.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2888">
+          <caret line="152" column="64" lean-forward="true" selection-start-line="152" selection-start-column="64" selection-end-line="152" selection-end-column="64" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/happiness/js/d3/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/happiness/js/d3.geomap.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3971">
+          <caret line="209" column="62" lean-forward="false" selection-start-line="209" selection-start-column="28" selection-end-line="209" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/happiness/worldmap.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="13889">
+          <caret line="731" column="0" lean-forward="true" selection-start-line="731" selection-start-column="0" selection-end-line="731" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/happiness/js/d3/brush.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/happiness/js/d3/sync.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7581">
+          <caret line="399" column="10" lean-forward="false" selection-start-line="399" selection-start-column="10" selection-end-line="399" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/happiness/js/d3/log.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="627">
+          <caret line="33" column="38" lean-forward="false" selection-start-line="33" selection-start-column="38" selection-end-line="33" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/happiness/worldmap.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1102">
@@ -423,58 +524,73 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/happiness/js/d3/log.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="836">
+          <caret line="47" column="0" lean-forward="false" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/happiness/css/layout.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="206">
+          <caret line="407" column="1" lean-forward="false" selection-start-line="407" selection-start-column="1" selection-end-line="408" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/happiness/js/d3/legend.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/happiness/js/d3/timeChart.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="583">
-          <caret line="974" column="34" lean-forward="false" selection-start-line="974" selection-start-column="34" selection-end-line="974" selection-end-column="34" />
+        <state relative-caret-position="181">
+          <caret line="983" column="44" lean-forward="false" selection-start-line="983" selection-start-column="44" selection-end-line="983" selection-end-column="44" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/happiness/js/d3.geomap.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="461">
-          <caret line="228" column="74" lean-forward="false" selection-start-line="228" selection-start-column="74" selection-end-line="228" selection-end-column="74" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/happiness/worldmap.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="163">
-          <caret line="731" column="0" lean-forward="true" selection-start-line="731" selection-start-column="0" selection-end-line="731" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/happiness/js/d3/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-14601">
-          <caret line="193" column="30" lean-forward="true" selection-start-line="193" selection-start-column="30" selection-end-line="193" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/happiness/js/d3/log.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="726">
-          <caret line="33" column="38" lean-forward="false" selection-start-line="33" selection-start-column="38" selection-end-line="33" selection-end-column="38" />
+        <state relative-caret-position="553">
+          <caret line="296" column="21" lean-forward="false" selection-start-line="296" selection-start-column="21" selection-end-line="296" selection-end-column="21" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/happiness/js/d3/sync.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="399" column="10" lean-forward="false" selection-start-line="399" selection-start-column="10" selection-end-line="399" selection-end-column="13" />
+        <state relative-caret-position="-2221">
+          <caret line="297" column="0" lean-forward="false" selection-start-line="297" selection-start-column="0" selection-end-line="297" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/happiness/worldmap.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="131">
+          <caret line="734" column="23" lean-forward="false" selection-start-line="734" selection-start-column="23" selection-end-line="734" selection-end-column="23" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/happiness/js/d3/brush.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-259">
-          <caret line="39" column="53" lean-forward="true" selection-start-line="39" selection-start-column="7" selection-end-line="39" selection-end-column="53" />
+        <state relative-caret-position="342">
+          <caret line="27" column="34" lean-forward="true" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/happiness/js/d3/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="137">
+          <caret line="118" column="10" lean-forward="true" selection-start-line="118" selection-start-column="10" selection-end-line="118" selection-end-column="10" />
           <folding />
         </state>
       </provider>

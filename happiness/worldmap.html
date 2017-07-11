@@ -730,8 +730,14 @@ function scatterChange(){
     variables.push(currentScatterX);
     variables.push(currentScatterY);
 
+    if(brushOn == true){
+       d3.select("#SVGScatter").selectAll(".brush").remove();
+       brushOn = false;
+    }
+
     drawScatter(singleYearData, categories[variableX], categories[variableY]);
     logEvent.log(variables, null, currentYear,6, 11);
+
 }
 
 scatterSliderInit();

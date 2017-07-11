@@ -29,6 +29,9 @@ var allCountries = [];
 //scatterplots
 function drawScatter(data, variable, variable2){
     d3.select("#SVGScatter").selectAll(".refresh").remove();
+
+    allCountries = [];
+
     var _dataset = data;
 
     scatterX = variable;
@@ -81,6 +84,7 @@ function drawScatter(data, variable, variable2){
 
     callBrush(minMax, variables);
 
+
     d3.select("#SVGScatter")
         .selectAll("circle")
         .data(_dataset)
@@ -109,7 +113,10 @@ function drawScatter(data, variable, variable2){
               return 500;
             }
         })
-        .attr("fill", "grey")
+        .attr("fill", function(d){
+            if(d["Country Code"]== currentCountry){return highlightCol}
+            else{return "grey"}
+        })
         .attr("r", 5)
         .attr("id", function(d){
             return d.id;
@@ -119,30 +126,46 @@ function drawScatter(data, variable, variable2){
             //while keeping the highlight in the single country
             //that is selected in other map or this scatterplot.
             if(isCountrySelected == false){
-                if (brushOn == false) {
-                    d3.select(this).attr("fill", highlightCol);
-                }
-
                 codeBar = d["Country Code"];
                 selectedBar = d["Country Code"];
                 changeColorSort(codeBar);
                 mapColor(selectedBar);
 
-                // else{
-                //     d3.select(this).attr("stroke", strokeCol)
-                //         .attr("stroke-width", strokeWidth);
-                // };
+                if (brushOn == false) {
+                    d3.select(this).attr("fill", highlightCol);
+                }
+                else{
+                    d3.select(this).attr("stroke", strokeCol)
+                        .attr("stroke-width", strokeWidth);
+                };
             }
             //if country is already selected
-            else{
+            else if(isCountrySelected == true){
               // the problem is that the highlight effect of brush just goes away when hovered.
                 // it seems the color provided at .on("click"...) takes precedence over brush.
-                d3.select(this).attr("fill", highlightCol);
+                codeBar = d["Country Code"];
+                selectedBar = d["Country Code"];
+                changeColorSort(codeBar);
+                mapColor(selectedBar);
 
                 if(brushOn == true){
-                d3.select(this).attr("stroke", strokeCol)
+                    d3.select("#SVGScatter").selectAll("circle")
+                        .attr("stroke", function (d) {
+                            if (currentCountry == d["Country Code"]) {return strokeCol;}
+                            else {return "none"};
+                        });
+                        d3.select(this).attr("stroke", strokeCol)
                                 .attr("stroke-width", strokeWidth);
-                    }
+                }
+                else if(brushOn == false){
+                    d3.select("#SVGScatter").selectAll("circle")
+                        .attr("fill", function (d) {
+                            if (currentCountry == d["Country Code"]) {return highlightCol;}
+                            else {return "grey"};
+                        });
+                    d3.select(this).attr("fill", highlightCol);
+
+                }
             }
                 //tooltip
                 var xPosition = parseFloat(d3.select(this).attr("cx"));
@@ -172,14 +195,6 @@ function drawScatter(data, variable, variable2){
                 }
                 if (brushOn == true) {
                 }
-
-                if (isCountrySelected == true) {
-                    changeColorSort(currentCountry);
-                    mapColor(currentCountry);
-                }
-                if (brushOn == false) {
-                    d3.select(this).attr("fill", "grey");
-                }
             }
             else if(isCountrySelected == true) {
                 if (brushOn == false) {
@@ -187,16 +202,24 @@ function drawScatter(data, variable, variable2){
                     d3.select("#SVGScatter").selectAll("circle")
                         .attr("fill", function (d) {
                             if (selected == d["Country Code"]) {
-                                return highlightCol
+                                return highlightCol;
                             }
                             else {
-                                return "grey"
+                                return "grey";
                             };
                         });
+
                 }
                 else if (brushOn == true) {
-                    // d3.select(this).attr("stroke", "none");
+                    var selected = currentCountry;
+                    d3.select("#SVGScatter").selectAll("circle")
+                        .attr("stroke", function (d) {
+                            if (selected == d["Country Code"]) {return strokeCol;}
+                            else {return "none"};
+                        });
                 }
+                changeColorSort(currentCountry);
+                mapColor(currentCountry);
             }
             var variables = [];
             variables.push(scatterX);
@@ -205,49 +228,63 @@ function drawScatter(data, variable, variable2){
         })
         .on("click", function(d){
             if(isCountrySelected == false) {
-
                 update(d["Country Code"]);
                 countryID = d["Country Code"];
                 currentCountry = countryID;
 
                 hoverCountry(currentCountry);
                 changeColor(currentCountry);
-
                 isCountrySelected = true;
+
+                logEvent.log(scatterX, scatterY, d["Country Code"], d["year"], 2, 14);
             }
 
             else if(isCountrySelected == true){
-                if (brushOn == false) {
-                    currentCountry = d["Country Code"];
-                    var selected = currentCountry;
-                    d3.select("#SVGScatter").selectAll("circle")
-                        .attr("fill", function (d) {
-                            if (selected == d["Country Code"]) {
-                                console.log(d["Country Code"], selected)
-                                return highlightCol
-                            }
-                            else {
-                                return "grey"
-                            }
-                            ;
-                        });
-                }
-                else if (brushOn == true) {
-                    // d3.select(this).attr("stroke", "none");
+                var formerColored = currentCountry;
+                //if same country clicked twice(lock goes off)
+                if(d["Country Code"]== formerColored){
+                        if(brushOn == true){
+                        d3.select(this).attr("stroke", "none")
+                        }
+                        if(brushOn == false) {
+                        d3.select(this).attr("fill", "grey")
+                        }
+                       isCountrySelected = false;
+                        refresh();
+                       logEvent.log(scatterX, scatterY, d["Country Code"], d["year"], 2, 15);
+               }
+                else{
+                    if (brushOn == false) {
+                        currentCountry = d["Country Code"];
+                        var selected = currentCountry;
+                        d3.select("#SVGScatter").selectAll("circle")
+                            .attr("fill", function (d) {
+                                if (selected == d["Country Code"]) {
+                                    return highlightCol;
+                                }
+                                else {
+                                    return "grey";
+                                };
+                            });
+                        countryID = d["Country Code"];
+                        currentCountry = countryID;
+                        hoverCountry(currentCountry);
+                        changeColor(currentCountry);
+                    }
+                    else if (brushOn == true) {
+                        countryID = d["Country Code"];
+                        currentCountry = countryID;
+                        hoverCountry(currentCountry);
+                        changeColor(currentCountry);
+
+                        d3.select(this).attr("stroke", strokeCol)
+                            .attr("stroke-width", strokeWidth);
+                    }
+                    logEvent.log(scatterX, scatterY, d["Country Code"], d["year"], 2, 14);
                 }
             }
-                //if a user selects a different country, the coloring changes immediately to reflect change
-                else {
-                    update(d["Country Code"]);
-                    countryID = d["Country Code"];
-                    currentCountry = countryID;
-                    hoverCountry(currentCountry);
-                    changeColor(currentCountry);
+            //for logging
 
-                    isCountrySelected = true;
-                }
-                //for logging
-            logEvent.log(scatterX, scatterY, d["Country Code"], d["year"], 2, 0);
         })
         .attr("transform", "translate(" + _padding + ", -15)")
         .attr("class", "refresh");
@@ -1194,7 +1231,7 @@ var drawBar = (function (){
             .data(combinedData)
             .enter()
             .append("rect")
-            .attr("class", "bar1");
+            .attr("class", "bar1 chartRect");
 
         bars.attr("x", function (d, i) {
             //there should be 160+ bars, including countries that are not included in this year's data
@@ -1245,24 +1282,30 @@ var drawBar = (function (){
         d3.select("#SVG1").selectAll(".bar1")
         //using 160+ country names;
             .on("mouseover", function (d) {
-
                 logEvent.log(1, d["countryCode"], d["year"], 0, 12);
+                var forIndex = d.countryCode;
+                var _code = totalCountries.indexOf(forIndex);
+
                 //if no country currently selected == color + other charts highligths should change on hover
-                if (isCountrySelected == false) {
-                    if (brushOn == false) {
-                        var forIndex = d.countryCode;
-                        var _code = totalCountries.indexOf(forIndex)
-
-                        _codeForText = _code;
-
-                        codeBar = _code;
-                        selectedBar = totalCountries[_code];
-                        changeColorSort(forIndex);
-                        mapColor(selectedBar);
+                if(brushOn == false) {
+                    if(isCountrySelected == true){
+                        d3.select("#SVG1").selectAll(".bar1").attr("fill", function(d){
+                            if(currentCountry == d.countryCode){
+                                return highlightCol;
+                            }
+                            else{return "grey"};
+                        })
                     }
-                    else if (brushOn == true) {
-                        var forIndex = d.countryCode;
-                        var _code = totalCountries.indexOf(forIndex);
+                    _codeForText = _code;
+
+                    codeBar = _code;
+                    selectedBar = totalCountries[_code];
+                    changeColorSort(forIndex);
+                    mapColor(selectedBar);
+
+                }
+                else if(brushOn == true){
+                    if(isCountrySelected == false) {
                         _codeForText = _code;
                         codeBar = _code;
                         selectedBar = totalCountries[_code];
@@ -1270,21 +1313,14 @@ var drawBar = (function (){
                         changeColorSort(forIndex);
                         mapColor(selectedBar);
                     }
-                }
-                // //when country is selected and brush is on (<-- causing problem right now)
-                //when a country is selected == two bars should be highlighted (1. currentCountry, 2. another one change on hover)
-                //it should not affect other charts
-                else if(isCountrySelected == true) {
-                    //this is only problematic when a brush is on (when off, works fine)
-                    if(brushOn == true){
-                        //find out code of the country selected + highlighed by brush <--should stay same when mouse out
-                        //run d3.selectAll for all bars in this #SVG1 and color that country bar
-                        //and color the bar (this) <-- which should return to gray in mouseout
-                        brushHighlight();
+                    else if(isCountrySelected == true){
+                        _codeForText = _code;
+                        codeBar = _code;
+                        selectedBar = totalCountries[_code];
+                        changeColorSort(forIndex);
+                        mapColor(selectedBar);
                     }
                 }
-
-                d3.select(this).attr("fill", highlightCol);
                 //tooltip
                 var xPosition = parseFloat(d3.select(this).attr("x"));
                 var yPosition = parseFloat(d3.select(this).attr("y"));
@@ -1307,14 +1343,11 @@ var drawBar = (function (){
                     if (brushOn == false) {
                         d3.select(this).attr("fill", "grey");
                     }
-                    else{
-                        d3.select(this).attr("fill", "grey")
+                    else if (brushOn == true){
                     }
                 }
                 else if (isCountrySelected == true) {
-                    if(brushOn == true){
-                    }
-                    else if(brushOn == false){
+                    if(brushOn == false) {
                         d3.select("#SVG1").selectAll("rect")
                             .attr("fill", function (d) {
                                 if (d.countryCode == currentCountry) {
@@ -1324,6 +1357,19 @@ var drawBar = (function (){
                                     return "grey"
                                 };
                             })
+                    }
+                    else if(brushOn == true){
+                        d3.select("#SVG1").selectAll("rect")
+                            .attr("stroke", function (d) {
+                                if (d.countryCode == currentCountry) {
+                                    return strokeCol;
+                                }
+                                else {
+                                    return "none"
+                                };
+                            })
+                        changeColorSort(currentCountry);
+                        mapColor(currentCountry);
                     }
                 }
             })
@@ -1336,21 +1382,24 @@ var drawBar = (function (){
                     changeColor(currentCountry);
 
                     isCountrySelected = true;
+                    logEvent.log(1, d["countryCode"], d["year"], 0, 14);
                 }
 
                 else if (isCountrySelected == true) {
                     var formerColored = currentCountry;
 
                     if (d.countryCode == currentCountry) {
-                        d3.selectAll(".unit").style("fill", function (d) {
-
-                            var codeIndex = codeStorage.indexOf(d.countryCode);
-                            isCountrySelected = false;
-                            if (codeIndex >= 0) {
-                                var _colorCode = valuesInRange[codeIndex];
-                                return returnColor(_colorCode);
-                            }
-                        })
+                        // d3.selectAll(".unit").style("fill", function (d) {
+                        //
+                        //     var codeIndex = codeStorage.indexOf(d.countryCode);
+                        //     isCountrySelected = false;
+                        //     if (codeIndex >= 0) {
+                        //         var _colorCode = valuesInRange[codeIndex];
+                        //         return returnColor(_colorCode);
+                        //     }
+                        // })
+                        refresh();
+                        logEvent.log(1, d["countryCode"], d["year"], 0, 15);
                     }
                     //if a user selects a different country, the coloring changes immediately to reflect change
 
@@ -1362,8 +1411,8 @@ var drawBar = (function (){
                         changeColor(currentCountry);
 
                         isCountrySelected = true;
+                        logEvent.log(1, d["countryCode"], d["year"], 0, 14);
                     }
-                    logEvent.log(1, d["countryCode"], d["year"], 0, 0);
                 }
             })
             .attr("transform", "translate(20, 0)");
@@ -1393,7 +1442,7 @@ var drawBar = (function (){
             .data(combinedData)
             .enter()
             .append("rect")
-            .attr("class", "bar2");
+            .attr("class", "bar2 chartRect");
 
         bars2.attr("x", function (d, i) {
             //there should be 160+ bars, including countries that are not included in this year's data
@@ -1447,20 +1496,22 @@ var drawBar = (function (){
         //using 160+ country names;
             .on("mouseover", function (d) {
                 logEvent.log(2, d["countryCode"], d["year"], 0, 12);
-                if (isCountrySelected == false) {
-                    if (brushOn == false) {
-                        var forIndex = d.countryCode;
-                        var _code = totalCountries.indexOf(forIndex)
+                var forIndex = d.countryCode;
+                var _code = totalCountries.indexOf(forIndex);
+
+                if(brushOn == false) {
+
                         _codeForText = _code;
 
                         codeBar = _code;
                         selectedBar = totalCountries[_code];
                         changeColorSort(forIndex);
                         mapColor(selectedBar);
-                    }
-                    else if (brushOn == true) {
-                        var forIndex = d.countryCode;
-                        var _code = totalCountries.indexOf(forIndex)
+
+                        d3.select(this).attr("fill", highlightCol);
+                }
+                else if(brushOn == true){
+                    if(isCountrySelected == false) {
                         _codeForText = _code;
                         codeBar = _code;
                         selectedBar = totalCountries[_code];
@@ -1468,13 +1519,15 @@ var drawBar = (function (){
                         changeColorSort(forIndex);
                         mapColor(selectedBar);
                     }
-                }
-                else if(isCountrySelected == true){
-                    if(brushOn == true){
-                        brushHighlight();
+                    else if(isCountrySelected == true){
+                        _codeForText = _code;
+                        codeBar = _code;
+                        selectedBar = totalCountries[_code];
+                        changeColorSort(forIndex);
+                        mapColor(selectedBar);
                     }
                 }
-                d3.select(this).attr("fill", highlightCol);
+
                 //tooltip
                 var xPosition = parseFloat(d3.select(this).attr("x")) - 10;
                 var yPosition = parseFloat(d3.select(this).attr("y")) - 30 + 90;
@@ -1495,12 +1548,10 @@ var drawBar = (function (){
             .on("mouseout", function (d) {
                 d3.select("#tooltip").classed("hidden", true);
                 if (isCountrySelected == false) {
-
                     if (brushOn == false) {
                         d3.select(this).attr("fill", "grey");
                     }
-                    else{
-                        d3.select(this).attr("fill", "grey")
+                    else if (brushOn == true){
                     }
                 }
                 else if (isCountrySelected == true) {
@@ -1515,6 +1566,19 @@ var drawBar = (function (){
                                 };
                             })
                     }
+                    else if(brushOn == true){
+                        d3.select("#SVG1").selectAll("rect")
+                            .attr("stroke", function (d) {
+                                if (d.countryCode == currentCountry) {
+                                    return strokeCol;
+                                }
+                                else {
+                                    return "none"
+                                };
+                            })
+                        changeColorSort(currentCountry);
+                        mapColor(currentCountry);
+                    }
                 }
                 logEvent.log(2, d["countryCode"], d["year"], 0, 13);
             })
@@ -1527,21 +1591,15 @@ var drawBar = (function (){
                     changeColor(currentCountry);
 
                     isCountrySelected = true;
+                    logEvent.log(2, d["countryCode"], d["year"], 0, 14);
                 }
 
                 else if (isCountrySelected == true) {
                     var formerColored = currentCountry;
 
                     if (d.countryCode == currentCountry) {
-                        d3.selectAll(".unit").style("fill", function (d) {
-
-                            var codeIndex = codeStorage.indexOf(d.countryCode);
-                            isCountrySelected = false;
-                            if (codeIndex >= 0) {
-                                var _colorCode = valuesInRange[codeIndex];
-                                return returnColor(_colorCode);
-                            }
-                        })
+                       refresh();
+                        logEvent.log(2, d["countryCode"], d["year"], 0, 15);
                     }
                     //if a user selects a different country, the coloring changes immediately to reflect change
 
@@ -1553,9 +1611,9 @@ var drawBar = (function (){
                         changeColor(currentCountry);
 
                         isCountrySelected = true;
+                        logEvent.log(2, d["countryCode"], d["year"], 0, 14);
                     }
                 }
-                logEvent.log(2, d["countryCode"], d["year"], 0, 0);
             })
             .attr("transform", "translate(20, 0)");
 
@@ -1589,7 +1647,7 @@ var drawBar = (function (){
             .data(combinedData)
             .enter()
             .append("rect")
-            .attr("class", "bar3");
+            .attr("class", "bar3 chartRect");
 
         bars3.attr("x", function (d, i) {
             //there should be 160+ bars, including countries that are not included in this year's data
@@ -1640,20 +1698,21 @@ var drawBar = (function (){
         //using 160+ country names;
             .on("mouseover", function (d) {
                 logEvent.log(3, d["countryCode"], d["year"], 0, 12);
-                if (isCountrySelected == false) {
-                    if (brushOn == false) {
-                        var forIndex = d.countryCode;
-                        var _code = totalCountries.indexOf(forIndex)
-                        _codeForText = _code;
+                var forIndex = d.countryCode;
+                var _code = totalCountries.indexOf(forIndex);
 
-                        codeBar = _code;
-                        selectedBar = totalCountries[_code];
-                        changeColorSort(forIndex);
-                        mapColor(selectedBar);
-                    }
-                    else if (brushOn == true) {
-                        var forIndex = d.countryCode;
-                        var _code = totalCountries.indexOf(forIndex)
+                if(brushOn == false) {
+                    _codeForText = _code;
+
+                    codeBar = _code;
+                    selectedBar = totalCountries[_code];
+                    changeColorSort(forIndex);
+                    mapColor(selectedBar);
+
+                    d3.select(this).attr("fill", highlightCol);
+                }
+                else if(brushOn == true){
+                    if(isCountrySelected == false) {
                         _codeForText = _code;
                         codeBar = _code;
                         selectedBar = totalCountries[_code];
@@ -1661,13 +1720,15 @@ var drawBar = (function (){
                         changeColorSort(forIndex);
                         mapColor(selectedBar);
                     }
-                }
-                else if(isCountrySelected == true){
-                    if(brushOn == true){
-                        brushHighlight();
+                    else if(isCountrySelected == true){
+                        _codeForText = _code;
+                        codeBar = _code;
+                        selectedBar = totalCountries[_code];
+                        changeColorSort(forIndex);
+                        mapColor(selectedBar);
                     }
                 }
-                d3.select(this).attr("fill", highlightCol);
+
                 //tooltip
                 var xPosition = parseFloat(d3.select(this).attr("x")) - 10;
                 var yPosition = parseFloat(d3.select(this).attr("y")) - 30 + 90;
@@ -1691,8 +1752,7 @@ var drawBar = (function (){
                     if (brushOn == false) {
                         d3.select(this).attr("fill", "grey");
                     }
-                    else{
-                        d3.select(this).attr("fill", "grey")
+                    else if (brushOn == true){
                     }
                 }
                 else if (isCountrySelected == true) {
@@ -1704,9 +1764,21 @@ var drawBar = (function (){
                                 }
                                 else {
                                     return "grey"
-                                }
-                                ;
+                                };
                             })
+                    }
+                    else if(brushOn == true){
+                        d3.select("#SVG1").selectAll("rect")
+                            .attr("stroke", function (d) {
+                                if (d.countryCode == currentCountry) {
+                                    return strokeCol;
+                                }
+                                else {
+                                    return "none"
+                                };
+                            })
+                        changeColorSort(currentCountry);
+                        mapColor(currentCountry);
                     }
                 }
                 logEvent.log(3, d["countryCode"], d["year"], 0, 13);
@@ -1720,21 +1792,15 @@ var drawBar = (function (){
                     changeColor(currentCountry);
 
                     isCountrySelected = true;
+                    logEvent.log(3, d["countryCode"], d["year"], 0, 14);
                 }
 
                 else if (isCountrySelected == true) {
                     var formerColored = currentCountry;
 
                     if (d.countryCode == currentCountry) {
-                        d3.selectAll(".unit").style("fill", function (d) {
-
-                            var codeIndex = codeStorage.indexOf(d.countryCode);
-                            isCountrySelected = false;
-                            if (codeIndex >= 0) {
-                                var _colorCode = valuesInRange[codeIndex];
-                                return returnColor(_colorCode);
-                            }
-                        })
+                        refresh();
+                        logEvent.log(3, d["countryCode"], d["year"], 0, 15);
                     }
                     //if a user selects a different country, the coloring changes immediately to reflect change
 
@@ -1746,9 +1812,10 @@ var drawBar = (function (){
                         changeColor(currentCountry);
 
                         isCountrySelected = true;
+                        logEvent.log(3, d["countryCode"], d["year"], 0, 14);
                     }
                 }
-                logEvent.log(3, d["countryCode"], d["year"], 0, 0);
+
             })
             .attr("transform", "translate(20, 0)");
 
@@ -1777,7 +1844,7 @@ var drawBar = (function (){
             .data(combinedData)
             .enter()
             .append("rect")
-            .attr("class", "bar4");
+            .attr("class", "bar4 chartRect");
 
         bars4.attr("x", function (d, i) {
             //there should be 160+ bars, including countries that are not included in this year's data
@@ -1813,21 +1880,20 @@ var drawBar = (function (){
             .attr("fill", "grey")
             .on("mouseover", function (d) {
                 logEvent.log(4, d["countryCode"], d["year"], 0, 12);
+                var forIndex = d.countryCode;
+                var _code = totalCountries.indexOf(forIndex);
+                if(brushOn == false) {
+                    _codeForText = _code;
 
-                if (isCountrySelected == false) {
-                    if (brushOn == false) {
-                        var forIndex = d.countryCode;
-                        var _code = totalCountries.indexOf(forIndex)
-                        _codeForText = _code;
+                    codeBar = _code;
+                    selectedBar = totalCountries[_code];
+                    changeColorSort(forIndex);
+                    mapColor(selectedBar);
 
-                        codeBar = _code;
-                        selectedBar = totalCountries[_code];
-                        changeColorSort(forIndex);
-                        mapColor(selectedBar);
-                    }
-                    else if (brushOn == true) {
-                        var forIndex = d.countryCode;
-                        var _code = totalCountries.indexOf(forIndex)
+                    d3.select(this).attr("fill", highlightCol);
+                }
+                else if(brushOn == true){
+                    if(isCountrySelected == false) {
                         _codeForText = _code;
                         codeBar = _code;
                         selectedBar = totalCountries[_code];
@@ -1835,8 +1901,14 @@ var drawBar = (function (){
                         changeColorSort(forIndex);
                         mapColor(selectedBar);
                     }
+                    else if(isCountrySelected == true){
+                        _codeForText = _code;
+                        codeBar = _code;
+                        selectedBar = totalCountries[_code];
+                        changeColorSort(forIndex);
+                        mapColor(selectedBar);
+                    }
                 }
-                d3.select(this).attr("fill", highlightCol);
                 //tooltip
                 var xPosition = parseFloat(d3.select(this).attr("x")) - 10;
                 var yPosition = parseFloat(d3.select(this).attr("y")) - 30 + 90 + 90 + 100;
@@ -1858,21 +1930,34 @@ var drawBar = (function (){
                     if (brushOn == false) {
                         d3.select(this).attr("fill", "grey");
                     }
-                    else{
-                        d3.select(this).attr("fill", "grey")
+                    else if (brushOn == true){
                     }
                 }
                 else if (isCountrySelected == true) {
-                    d3.select("#SVG4").selectAll("rect")
-                        .attr("fill", function (d) {
-                            if (d.countryCode == currentCountry) {
-                                return highlightCol;
-                            }
-                            else {
-                                return "grey"
-                            }
-                            ;
-                        })
+                    if(brushOn == false) {
+                        d3.select("#SVG4").selectAll("rect")
+                            .attr("fill", function (d) {
+                                if (d.countryCode == currentCountry) {
+                                    return highlightCol;
+                                }
+                                else {
+                                    return "grey"
+                                };
+                            })
+                    }
+                    else if(brushOn == true){
+                        d3.select("#SVG1").selectAll("rect")
+                            .attr("stroke", function (d) {
+                                if (d.countryCode == currentCountry) {
+                                    return strokeCol;
+                                }
+                                else {
+                                    return "none"
+                                };
+                            })
+                        changeColorSort(currentCountry);
+                        mapColor(currentCountry);
+                    }
                 }
                 logEvent.log(4, d["countryCode"], d["year"], 0, 13);
             })
@@ -1885,21 +1970,15 @@ var drawBar = (function (){
                     changeColor(currentCountry);
 
                     isCountrySelected = true;
+                    logEvent.log(4, d["countryCode"], d["year"], 0, 14);
                 }
 
                 else if (isCountrySelected == true) {
                     var formerColored = currentCountry;
 
                     if (d.countryCode == currentCountry) {
-                        d3.selectAll(".unit").style("fill", function (d) {
-
-                            var codeIndex = codeStorage.indexOf(d.countryCode);
-                            isCountrySelected = false;
-                            if (codeIndex >= 0) {
-                                var _colorCode = valuesInRange[codeIndex];
-                                return returnColor(_colorCode);
-                            }
-                        })
+                        refresh();
+                        logEvent.log(4, d["countryCode"], d["year"], 0, 15);
                     }
                     //if a user selects a different country, the coloring changes immediately to reflect change
 
@@ -1911,9 +1990,10 @@ var drawBar = (function (){
                         changeColor(currentCountry);
 
                         isCountrySelected = true;
+                        logEvent.log(4, d["countryCode"], d["year"], 0, 14);
                     }
                 }
-                logEvent.log(4, d["countryCode"], d["year"], 0, 0);
+
             })
             .attr("transform", "translate(20, 0)");
 
@@ -1941,7 +2021,7 @@ var drawBar = (function (){
             .data(combinedData)
             .enter()
             .append("rect")
-            .attr("class", "bar5");
+            .attr("class", "bar5 chartRect");
 
         bars5.attr("x", function (d, i) {
             return i * (_svgW / totalCountries.length);
@@ -1988,20 +2068,21 @@ var drawBar = (function (){
             .attr("fill", "grey")
             .on("mouseover", function (d) {
                 logEvent.log(5, d["countryCode"], d["year"], 0, 12);
-                if (isCountrySelected == false) {
-                    if (brushOn == false) {
-                        var forIndex = d.countryCode;
-                        var _code = totalCountries.indexOf(forIndex)
-                        _codeForText = _code;
+                var forIndex = d.countryCode;
+                var _code = totalCountries.indexOf(forIndex);
 
-                        codeBar = _code;
-                        selectedBar = totalCountries[_code];
-                        changeColorSort(forIndex);
-                        mapColor(selectedBar);
-                    }
-                    else if (brushOn == true) {
-                        var forIndex = d.countryCode;
-                        var _code = totalCountries.indexOf(forIndex)
+                if(brushOn == false) {
+                    _codeForText = _code;
+
+                    codeBar = _code;
+                    selectedBar = totalCountries[_code];
+                    changeColorSort(forIndex);
+                    mapColor(selectedBar);
+
+                    d3.select(this).attr("fill", highlightCol);
+                }
+                else if(brushOn == true){
+                    if(isCountrySelected == false) {
                         _codeForText = _code;
                         codeBar = _code;
                         selectedBar = totalCountries[_code];
@@ -2009,14 +2090,14 @@ var drawBar = (function (){
                         changeColorSort(forIndex);
                         mapColor(selectedBar);
                     }
-                }
-                else if(isCountrySelected == true){
-                    if(brushOn == true){
-                        brushHighlight();
+                    else if(isCountrySelected == true){
+                        _codeForText = _code;
+                        codeBar = _code;
+                        selectedBar = totalCountries[_code];
+                        changeColorSort(forIndex);
+                        mapColor(selectedBar);
                     }
                 }
-
-                d3.select(this).attr("fill", highlightCol);
                 //tooltip
                 var xPosition = parseFloat(d3.select(this).attr("x")) - 10;
                 var yPosition = parseFloat(d3.select(this).attr("y")) - 30 + 90 + 90 + 100 + 90;
@@ -2038,8 +2119,7 @@ var drawBar = (function (){
                     if (brushOn == false) {
                         d3.select(this).attr("fill", "grey");
                     }
-                    else{
-                        d3.select(this).attr("fill", "grey")
+                    else if (brushOn == true){
                     }
                 }
                 else if (isCountrySelected == true) {
@@ -2054,6 +2134,19 @@ var drawBar = (function (){
                                 };
                             })
                     }
+                    else if(brushOn == true){
+                        d3.select("#SVG1").selectAll("rect")
+                            .attr("stroke", function (d) {
+                                if (d.countryCode == currentCountry) {
+                                    return strokeCol;
+                                }
+                                else {
+                                    return "none"
+                                };
+                            })
+                        changeColorSort(currentCountry);
+                        mapColor(currentCountry);
+                    }
                 }
                 logEvent.log(4, d["countryCode"], d["year"], 0, 13);
             })
@@ -2066,21 +2159,15 @@ var drawBar = (function (){
                     changeColor(currentCountry);
 
                     isCountrySelected = true;
+                    logEvent.log(5, d["countryCode"], d["year"], 0, 14);
                 }
 
                 else if (isCountrySelected == true) {
                     var formerColored = currentCountry;
 
                     if (d.countryCode == currentCountry) {
-                        d3.selectAll(".unit").style("fill", function (d) {
-
-                            var codeIndex = codeStorage.indexOf(d.countryCode);
-                            isCountrySelected = false;
-                            if (codeIndex >= 0) {
-                                var _colorCode = valuesInRange[codeIndex];
-                                return returnColor(_colorCode);
-                            }
-                        })
+                        refresh();
+                        logEvent.log(5, d["countryCode"], d["year"], 0, 15);
                     }
                     //if a user selects a different country, the coloring changes immediately to reflect change
 
@@ -2092,9 +2179,10 @@ var drawBar = (function (){
                         changeColor(currentCountry);
 
                         isCountrySelected = true;
+                        logEvent.log(5, d["countryCode"], d["year"], 0, 14);
                     }
                 }
-                logEvent.log(5, d["countryCode"], d["year"], 0, 0);
+
             })
             .attr("transform", "translate(20, 0)");
 
@@ -2122,7 +2210,7 @@ var drawBar = (function (){
             .data(combinedData)
             .enter()
             .append("rect")
-            .attr("class", "bar6");
+            .attr("class", "bar6 chartRect");
 
         bars6.attr("x", function (d, i) {
             return i * (_svgW / totalCountries.length);
@@ -2154,20 +2242,21 @@ var drawBar = (function (){
             .attr("fill", "grey")
             .on("mouseover", function (d) {
                 logEvent.log(6, d["countryCode"], d["year"], 0, 12);
-                if (isCountrySelected == false) {
-                    if (brushOn == false) {
-                        var forIndex = d.countryCode;
-                        var _code = totalCountries.indexOf(forIndex)
-                        _codeForText = _code;
+                var forIndex = d.countryCode;
+                var _code = totalCountries.indexOf(forIndex);
 
-                        codeBar = _code;
-                        selectedBar = totalCountries[_code];
-                        changeColorSort(forIndex);
-                        mapColor(selectedBar);
-                    }
-                    else if (brushOn == true) {
-                        var forIndex = d.countryCode;
-                        var _code = totalCountries.indexOf(forIndex)
+                if(brushOn == false) {
+                    _codeForText = _code;
+
+                    codeBar = _code;
+                    selectedBar = totalCountries[_code];
+                    changeColorSort(forIndex);
+                    mapColor(selectedBar);
+
+                    d3.select(this).attr("fill", highlightCol);
+                }
+                else if(brushOn == true){
+                    if(isCountrySelected == false) {
                         _codeForText = _code;
                         codeBar = _code;
                         selectedBar = totalCountries[_code];
@@ -2175,13 +2264,14 @@ var drawBar = (function (){
                         changeColorSort(forIndex);
                         mapColor(selectedBar);
                     }
-                }
-                else if(isCountrySelected == true){
-                    if(brushOn == true){
-                        brushHighlight();
+                    else if(isCountrySelected == true){
+                        _codeForText = _code;
+                        codeBar = _code;
+                        selectedBar = totalCountries[_code];
+                        changeColorSort(forIndex);
+                        mapColor(selectedBar);
                     }
                 }
-                d3.select(this).attr("fill", highlightCol);
 
                 //tooltip
                 var xPosition = parseFloat(d3.select(this).attr("x")) - 10;
@@ -2204,8 +2294,7 @@ var drawBar = (function (){
                     if (brushOn == false) {
                         d3.select(this).attr("fill", "grey");
                     }
-                    else{
-                        d3.select(this).attr("fill", "grey")
+                    else if (brushOn == true){
                     }
                 }
                 else if (isCountrySelected == true) {
@@ -2220,6 +2309,19 @@ var drawBar = (function (){
                                 };
                             })
                     }
+                    else if(brushOn == true){
+                        d3.select("#SVG1").selectAll("rect")
+                            .attr("stroke", function (d) {
+                                if (d.countryCode == currentCountry) {
+                                    return strokeCol;
+                                }
+                                else {
+                                    return "none"
+                                };
+                            })
+                        changeColorSort(currentCountry);
+                        mapColor(currentCountry);
+                    }
                 }
                 logEvent.log(6, d["countryCode"], d["year"], 0, 13);
             })
@@ -2232,21 +2334,15 @@ var drawBar = (function (){
                     changeColor(currentCountry);
 
                     isCountrySelected = true;
+                    logEvent.log(6, d["countryCode"], d["year"], 0, 14);
                 }
 
                 else if (isCountrySelected == true) {
                     var formerColored = currentCountry;
 
                     if (d.countryCode == currentCountry) {
-                        d3.selectAll(".unit").style("fill", function (d) {
-
-                            var codeIndex = codeStorage.indexOf(d.countryCode);
-                            isCountrySelected = false;
-                            if (codeIndex >= 0) {
-                                var _colorCode = valuesInRange[codeIndex];
-                                return returnColor(_colorCode);
-                            }
-                        })
+                        refresh();
+                        logEvent.log(6, d["countryCode"], d["year"], 0, 15);
                     }
                     //if a user selects a different country, the coloring changes immediately to reflect change
 
@@ -2258,9 +2354,10 @@ var drawBar = (function (){
                         changeColor(currentCountry);
 
                         isCountrySelected = true;
+                        logEvent.log(6, d["countryCode"], d["year"], 0, 14);
                     }
                 }
-                logEvent.log(6, d["countryCode"], d["year"], 0, 0);
+
             })
             .attr("transform", "translate(20, 0)");
 
@@ -2288,7 +2385,7 @@ var drawBar = (function (){
             .data(combinedData)
             .enter()
             .append("rect")
-            .attr("class", "bar7");
+            .attr("class", "bar7 chartRect");
 
         bars7.attr("x", function (d, i) {
             return i * (_svgW / totalCountries.length);
@@ -2320,22 +2417,22 @@ var drawBar = (function (){
             .attr("fill", "grey")
             .on("mouseover", function (d) {
                 logEvent.log(7, d["countryCode"], d["year"], 0, 12);
-                if (isCountrySelected == false) {
-                    if (brushOn == false) {
-                        // var _code = parseInt(this.id);
-                        // var forIndex = d.countryCode;
-                        var forIndex = d.countryCode;
-                        var _code = totalCountries.indexOf(forIndex)
-                        _codeForText = _code;
+                var forIndex = d.countryCode;
+                var _code = totalCountries.indexOf(forIndex);
 
-                        codeBar = _code;
-                        selectedBar = totalCountries[_code];
-                        changeColorSort(forIndex);
-                        mapColor(selectedBar);
-                    }
-                    else if (brushOn == true) {
-                        var forIndex = d.countryCode;
-                        var _code = totalCountries.indexOf(forIndex)
+                if(brushOn == false) {
+
+                    _codeForText = _code;
+
+                    codeBar = _code;
+                    selectedBar = totalCountries[_code];
+                    changeColorSort(forIndex);
+                    mapColor(selectedBar);
+
+                    d3.select(this).attr("fill", highlightCol);
+                }
+                else if(brushOn == true){
+                    if(isCountrySelected == false) {
                         _codeForText = _code;
                         codeBar = _code;
                         selectedBar = totalCountries[_code];
@@ -2343,14 +2440,14 @@ var drawBar = (function (){
                         changeColorSort(forIndex);
                         mapColor(selectedBar);
                     }
-                }
-                else if(isCountrySelected == true){
-                    if(brushOn == true){
-                        brushHighlight();
+                    else if(isCountrySelected == true){
+                        _codeForText = _code;
+                        codeBar = _code;
+                        selectedBar = totalCountries[_code];
+                        changeColorSort(forIndex);
+                        mapColor(selectedBar);
                     }
                 }
-
-                d3.select(this).attr("fill", highlightCol);
                 //tooltip
                 var xPosition = parseFloat(d3.select(this).attr("x")) - 10;
                 var yPosition = parseFloat(d3.select(this).attr("y")) - 30 + 90 + 90 + 100 + 180 + 100;
@@ -2370,10 +2467,9 @@ var drawBar = (function (){
                 d3.select("#tooltip").classed("hidden", true);
                 if (isCountrySelected == false) {
                     if (brushOn == false) {
-                        d3.selectAll(".bar7").attr("fill", "grey");
+                        d3.select(this).attr("fill", "grey");
                     }
-                    else{
-                        d3.select(this).attr("fill", "grey")
+                    else if (brushOn == true){
                     }
                 }
                 else if (isCountrySelected == true) {
@@ -2388,6 +2484,19 @@ var drawBar = (function (){
                                 };
                             })
                     }
+                    else if(brushOn == true){
+                        d3.select("#SVG1").selectAll("rect")
+                            .attr("stroke", function (d) {
+                                if (d.countryCode == currentCountry) {
+                                    return strokeCol;
+                                }
+                                else {
+                                    return "none"
+                                };
+                            })
+                        changeColorSort(currentCountry);
+                        mapColor(currentCountry);
+                    }
                 }
                 logEvent.log(7, d["countryCode"], d["year"], 0, 13);
             })
@@ -2400,21 +2509,15 @@ var drawBar = (function (){
                     changeColor(currentCountry);
 
                     isCountrySelected = true;
+                    logEvent.log(7, d["countryCode"], d["year"], 0, 14);
                 }
 
                 else if (isCountrySelected == true) {
                     var formerColored = currentCountry;
 
                     if (d.countryCode == currentCountry) {
-                        d3.selectAll(".unit").style("fill", function (d) {
-
-                            var codeIndex = codeStorage.indexOf(d.countryCode);
-                            isCountrySelected = false;
-                            if (codeIndex >= 0) {
-                                var _colorCode = valuesInRange[codeIndex];
-                                return returnColor(_colorCode);
-                            }
-                        })
+                        refresh();
+                        logEvent.log(7, d["countryCode"], d["year"], 0, 15);
                     }
                     //if a user selects a different country, the coloring changes immediately to reflect change
 
@@ -2426,9 +2529,10 @@ var drawBar = (function (){
                         changeColor(currentCountry);
 
                         isCountrySelected = true;
+                        logEvent.log(7, d["countryCode"], d["year"], 0, 14);
                     }
                 }
-                logEvent.log(7, d["countryCode"], d["year"], 0, 0);
+
             })
             .attr("transform", "translate(20, 0)");
 

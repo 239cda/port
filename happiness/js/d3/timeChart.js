@@ -980,7 +980,8 @@ var area_time7 = d3.select("#Time7").append("g");
 
         d3.select("#Time8").append("g")
             .call(xAxis)
-            .attr("transform", "translate(20, -9)")
+            .attr("class", "axis")
+            .attr("transform", "translate(33, 5)")
     }
     }
 

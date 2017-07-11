@@ -45,7 +45,7 @@ var logEvent = (function(){
             TimeStamp:[_hour + ":" + _minutes + ":" + _seconds]
     }
         userData.push(log);
-        console.log(log);
+
     }
     function _viewLog(){
         console.log(userData);
@@ -56,7 +56,7 @@ var logEvent = (function(){
     }
 })();
 
-// //function for sending logged data (in an array) to the database
+//function for sending logged data (in an array) to the database
 // var DATA = (function() {
 //     var _apiKey = "S5bp6OFlGZY1SkqczrNNJ9B2KVh86NTD";
 //     var _QueryApiKey = "&apiKey=S5bp6OFlGZY1SkqczrNNJ9B2KVh86NTD";
@@ -92,9 +92,7 @@ var logEvent = (function(){
 //         insertUser:_insertUser
 //     }
 // })();
-
-//create event listener for each elements in the viz
-//should include the time and which variable in which chart interacted
+//
 // var userData = [];
 //
 // var logEvent = (function(){
@@ -251,5 +249,5 @@ var logEvent = (function(){
 //     brush:_brush
 // }
 // })();
-//
+
 
