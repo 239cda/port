@@ -277,7 +277,7 @@ var Geomap = (function () {
                             refresh();
                         }
                         else if (isCountrySelected == true) {
-                            console.log(currentCountry)
+
                             d3.selectAll(".unit").style("fill", function (d) {
                                 if (d.id == currentCountry) {
                                     var location = codeStorage.indexOf(d.id);
