@@ -211,13 +211,10 @@ var Geomap = (function () {
                         var thisCountry = countryID;
                         if(brushOn == false) {
                             d3.selectAll(".unit").style("fill", function (d) {
-                                if (d.id == thisCountry) {
+                                if (d.id == thisCountry || d.id == currentCountry) {
                                     var location = codeStorage.indexOf(d.id);
                                     var rawColorCode = Number(valuesInRange[location]);
                                     // legend.highlightLegend(rawColorCode);
-                                    return highlightCol;
-                                }
-                                else if (d.id == currentCountry) {
                                     return highlightCol;
                                 }
                                 else {
@@ -229,6 +226,8 @@ var Geomap = (function () {
                                 }
                                 ;
                             })
+                            hoverCountry(thisCountry);
+                            changeColorSort(thisCountry);
                         }
                         else if(brushOn == true) {
                             if (isCountrySelected == true) {
@@ -284,7 +283,6 @@ var Geomap = (function () {
                                 if (d.id == currentCountry) {
                                     var location = codeStorage.indexOf(d.id);
                                     var rawColorCode = Number(valuesInRange[location]);
-                                    // legend.highlightLegend(rawColorCode);
                                     return highlightCol;
                                 }
                                 else {
@@ -295,6 +293,7 @@ var Geomap = (function () {
                                     }
                                 }
                             })
+                            changeColor(currentCountry)
                         }
                     }
                    else if(brushOn == true){

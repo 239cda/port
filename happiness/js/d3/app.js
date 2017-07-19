@@ -1348,7 +1348,7 @@ var drawBar = (function (){
                 }
                 else if (isCountrySelected == true) {
                     if(brushOn == false) {
-                        d3.select("#SVG1").selectAll("rect")
+                        d3.selectAll(".chartRect")
                             .attr("fill", function (d) {
                                 if (d.countryCode == currentCountry) {
                                     return highlightCol;
@@ -1357,6 +1357,8 @@ var drawBar = (function (){
                                     return "grey"
                                 };
                             })
+                        changeColorSort(currentCountry);
+                        mapColor(currentCountry);
                     }
                     else if(brushOn == true){
                         d3.select("#SVG1").selectAll("rect")
@@ -1556,7 +1558,7 @@ var drawBar = (function (){
                 }
                 else if (isCountrySelected == true) {
                     if(brushOn == false) {
-                        d3.select("#SVG2").selectAll("rect")
+                        d3.selectAll(".chartRect")
                             .attr("fill", function (d) {
                                 if (d.countryCode == currentCountry) {
                                     return highlightCol;
@@ -1565,6 +1567,8 @@ var drawBar = (function (){
                                     return "grey"
                                 };
                             })
+                        changeColorSort(currentCountry);
+                        mapColor(currentCountry);
                     }
                     else if(brushOn == true){
                         d3.select("#SVG1").selectAll("rect")
@@ -1757,7 +1761,7 @@ var drawBar = (function (){
                 }
                 else if (isCountrySelected == true) {
                     if(brushOn == false) {
-                        d3.select("#SVG3").selectAll("rect")
+                        d3.selectAll(".chartRect")
                             .attr("fill", function (d) {
                                 if (d.countryCode == currentCountry) {
                                     return highlightCol;
@@ -1766,6 +1770,8 @@ var drawBar = (function (){
                                     return "grey"
                                 };
                             })
+                        changeColorSort(currentCountry);
+                        mapColor(currentCountry);
                     }
                     else if(brushOn == true){
                         d3.select("#SVG1").selectAll("rect")
@@ -1935,7 +1941,7 @@ var drawBar = (function (){
                 }
                 else if (isCountrySelected == true) {
                     if(brushOn == false) {
-                        d3.select("#SVG4").selectAll("rect")
+                        d3.selectAll(".chartRect")
                             .attr("fill", function (d) {
                                 if (d.countryCode == currentCountry) {
                                     return highlightCol;
@@ -1944,6 +1950,8 @@ var drawBar = (function (){
                                     return "grey"
                                 };
                             })
+                        changeColorSort(currentCountry);
+                        mapColor(currentCountry);
                     }
                     else if(brushOn == true){
                         d3.select("#SVG1").selectAll("rect")
@@ -2124,7 +2132,7 @@ var drawBar = (function (){
                 }
                 else if (isCountrySelected == true) {
                     if(brushOn == false) {
-                        d3.select("#SVG5").selectAll("rect")
+                        d3.selectAll(".chartRect")
                             .attr("fill", function (d) {
                                 if (d.countryCode == currentCountry) {
                                     return highlightCol;
@@ -2133,6 +2141,8 @@ var drawBar = (function (){
                                     return "grey"
                                 };
                             })
+                        changeColorSort(currentCountry);
+                        mapColor(currentCountry);
                     }
                     else if(brushOn == true){
                         d3.select("#SVG1").selectAll("rect")
@@ -2299,7 +2309,7 @@ var drawBar = (function (){
                 }
                 else if (isCountrySelected == true) {
                     if(brushOn == false) {
-                        d3.select("#SVG6").selectAll("rect")
+                        d3.selectAll(".chartRect")
                             .attr("fill", function (d) {
                                 if (d.countryCode == currentCountry) {
                                     return highlightCol;
@@ -2308,6 +2318,8 @@ var drawBar = (function (){
                                     return "grey"
                                 };
                             })
+                        changeColorSort(currentCountry);
+                        mapColor(currentCountry);
                     }
                     else if(brushOn == true){
                         d3.select("#SVG1").selectAll("rect")
@@ -2474,7 +2486,7 @@ var drawBar = (function (){
                 }
                 else if (isCountrySelected == true) {
                     if(brushOn == false) {
-                        d3.select("#SVG7").selectAll("rect")
+                        d3.selectAll(".chartRect")
                             .attr("fill", function (d) {
                                 if (d.countryCode == currentCountry) {
                                     return highlightCol;
@@ -2483,6 +2495,8 @@ var drawBar = (function (){
                                     return "grey"
                                 };
                             })
+                        changeColorSort(currentCountry);
+                        mapColor(currentCountry);
                     }
                     else if(brushOn == true){
                         d3.select("#SVG1").selectAll("rect")
