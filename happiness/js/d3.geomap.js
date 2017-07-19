@@ -156,7 +156,9 @@ var Geomap = (function () {
                 var pastX;
                 var pastY;
                 function zooming() {
-                    if(event.deltaY > 0){
+                    if(event == undefined){
+                    }
+                    else if(event.deltaY > 0){
                         self.svg.selectAll('g.zoom').transition().duration(750).attr('transform', 'scale(1)');
                         logEvent.log(currentVar[0], null, currentYear, 1, 5);
                     }

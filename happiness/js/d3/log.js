@@ -107,7 +107,7 @@ var DATA = (function() {
 })();
 //logging for 5 min interval
 function callLog() {
-    setInterval(function(){DATA.insertUser(userData);userData = [];}, 300000);
+    setInterval(function(){DATA.insertUser(userData);userData = [];}, 180000);
     // setInterval(function(){DATA.insertUser(userData);userData = [];}, 3000);
 }
 callLog();
