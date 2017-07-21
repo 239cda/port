@@ -40,6 +40,9 @@ var logEvent = (function(){
         if(typeof(variable) == "number"){
             variable = _categories[variable - 1];
         };
+        if(variable == undefined){
+            variable = "Life Ladder";
+        }
 
         var log = {
             Category: "Happiness Score",

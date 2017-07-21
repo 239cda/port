@@ -5,6 +5,8 @@ var storedColorValues = [];
 var idOrder = [];
 var isCountrySelected = false;
 
+//below var stores current variable for map
+var currentVarMap;
 //number value for each country that represents which color to paint(from 1-9)
 var valuesInRange = [];
 //to find out which country is being assigned each color, this has same order as valuesInRange.
@@ -160,11 +162,11 @@ var Geomap = (function () {
                     }
                     else if(event.deltaY > 0){
                         self.svg.selectAll('g.zoom').transition().duration(750).attr('transform', 'scale(1)');
-                        logEvent.log(currentVar[0], null, currentYear, 1, 5);
+                        logEvent.log(currentVarMap, null, currentYear, 1, 5);
                     }
                     else if(event.deltaY < 0){
                         self.svg.selectAll('g.zoom').transition().duration(750).attr('transform', 'translate(' + x0 + ', ' + y0 + ')scale(' + kZoom + ')translate(-' + mouseX  + ', -' + mouseY + ')');
-                        logEvent.log(currentVar[0], null, currentYear, 1, 4);
+                        logEvent.log(currentVarMap, null, currentYear, 1, 4);
                     }
                     pastX = mouseX;
                     pastY = mouseY;
@@ -266,7 +268,7 @@ var Geomap = (function () {
                             }
                         }
                     };
-                    logEvent.log(currentVar[0], d.id, currentYear, 1, 12);
+                    logEvent.log(currentVarMap, d.id, currentYear, 1, 12);
                 })
                     .attr("d", self.path).on("mouseout", function(d)
                 {
@@ -313,7 +315,7 @@ var Geomap = (function () {
                                 }
                             }})
                     }
-                    logEvent.log(currentVar[0], d.id, currentYear, 1, 13);
+                    logEvent.log(currentVarMap, d.id, currentYear, 1, 13);
                 })
                     .attr('d', self.path).on('click', function(d){
 
@@ -330,7 +332,7 @@ var Geomap = (function () {
                         changeColor(currentCountry);
 
                         isCountrySelected = true;
-                        logEvent.log(currentVar[0], d.id, currentYear, 1, 14);
+                        logEvent.log(currentVarMap, d.id, currentYear, 1, 14);
                     }
 
                     else if(isCountrySelected == true){
@@ -347,7 +349,7 @@ var Geomap = (function () {
                         })
                             refresh();
 
-                            logEvent.log(currentVar[0], d.id, currentYear, 1, 15);
+                            logEvent.log(currentVarMap, d.id, currentYear, 1, 15);
                         }
                         //if a user selects a different country, the coloring changes immediately to reflect change
 
@@ -359,7 +361,7 @@ var Geomap = (function () {
                             changeColor(currentCountry);
 
                             isCountrySelected = true;
-                            logEvent.log(currentVar[0], d.id, currentYear, 1, 14);
+                            logEvent.log(currentVarMap, d.id, currentYear, 1, 14);
                         }
                     };
 
@@ -449,6 +451,9 @@ var getColorValue = (function(){
 
     function _getRawValues(data, variable)
     {
+        //store variable information to use in logging
+        currentVarMap = variable;
+
         var property;
 
         if(variable == categories[0]){property = "var1";}
