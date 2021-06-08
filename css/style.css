@@ -279,7 +279,8 @@ p {
   background-color: #88e069;
   display: -webkit-flex;
   display: -ms-flexbox;
-  display: flex; }
+  display: flex; 
+ } 
   .bannerD div {
     margin: auto auto auto 10px; }
 
